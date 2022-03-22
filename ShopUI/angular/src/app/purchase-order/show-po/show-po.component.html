@@ -1,0 +1,22 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td>Order No</td>
+            <td>Supplier Name</td>
+            <td>Stock Site</td>
+            <td>Stock Name</td>
+            <td>Order Date</td> 
+            <td>Sent Mail</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let dataItem of PurchaseOrderList">
+            <td ><a [title]="dataItem.OrderNo" routerLink="/purchase-order/detail-po/{{dataItem.OrderNo}}">{{dataItem.OrderNo}}</a></td>
+            <td>{{dataItem.SupplierName}}</td>
+            <td>{{dataItem.StockSite}}</td>
+            <td>{{dataItem.StockName}}</td>
+            <td>{{dataItem.OrderDate | date:'longDate'}}</td>
+            <td><input type="checkbox" [checked]="dataItem.SentMail" disabled/></td>
+        </tr>
+    </tbody>
+</table>
