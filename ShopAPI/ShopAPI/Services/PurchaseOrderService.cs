@@ -32,7 +32,8 @@ namespace ShopAPI.Services
             bool res = _poRepo.Create(po);
             if (res == true)
                 return new JsonResult("Inserted new record to purchase order table successfully");
-            return new JsonResult("Something went wrong");
+            else
+                return new JsonResult("Something went wrong");
         }
         public JsonResult GetRecord(int no)
         {
@@ -44,7 +45,8 @@ namespace ShopAPI.Services
             bool res = _poRepo.Update(po);
             if (res == true)
                 return new JsonResult("Updated record in purchase order table successfully");
-            return new JsonResult("Something went wrong");
+            else
+                return new JsonResult("Something went wrong");
         }
 
         public JsonResult Delete(int no)
@@ -52,7 +54,8 @@ namespace ShopAPI.Services
             bool res = _poRepo.Delete(no);
             if (res == true)
                 return new JsonResult("Deleted record in purchase order table successfully");
-            return new JsonResult("Something went wrong");
+            else
+                return new JsonResult("Something went wrong");
         }
     }
 }

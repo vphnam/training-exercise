@@ -1,5 +1,6 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { SharedService } from 'src/app/shared.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-po-detail-form',
   templateUrl: './po-detail-form.component.html',
@@ -7,18 +8,16 @@ import { SharedService } from 'src/app/shared.service';
 })
 export class PoDetailFormComponent implements OnInit {
 
+  @Input() no: any;
   constructor(private service: SharedService) { 
   }
 
-  PurchaseOrder: any=[];
-  @Input() orderNo: any;
-
+  po : any = [];
   ngOnInit(): void {
-    this.getPoDetail();
-  }
+    this.getPoDetail(this.no);
+  } 
 
-  getPoDetail(){
-    this.service.getOneRecordPurchaseOrder(this.orderNo).subscribe(data => {this.PurchaseOrder = data;});
+  getPoDetail(val: Number){
+    this.service.getOneRecordPurchaseOrderByOrderNo(val).subscribe(data => {this.po = data;});
   }
-  
 }

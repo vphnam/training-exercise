@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedService } from 'src/app/shared.service';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-show-po',
   templateUrl: './show-po.component.html',
@@ -7,9 +8,8 @@ import { SharedService } from 'src/app/shared.service';
 })
 export class ShowPoComponent implements OnInit {
 
-  constructor(private service: SharedService) { 
+  constructor(private service: SharedService, private route: ActivatedRoute) { 
   }
-
   PurchaseOrderList: any=[];
 
   ngOnInit(): void {

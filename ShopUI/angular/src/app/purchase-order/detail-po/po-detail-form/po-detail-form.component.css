@@ -1,0 +1,7 @@
+.col-md-4, .col-md-2{
+    margin-top: 10px;
+}
+.col-md-4 textarea{
+    height: 150px;
+    max-height: 300px;
+}

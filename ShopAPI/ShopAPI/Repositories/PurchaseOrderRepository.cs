@@ -59,13 +59,14 @@ namespace ShopAPI.Repositories
                 {
                     return true;
                 }
+                else
+                    return false;
             }
-            return false;
         }
 
         public JsonResult GetRecord(int no)
         {
-            query = string.Format("SELECT po.OrderNo, sp.SupplierName, po.StockSite, po.StockName, po.OrderDate, po.Note, po.Address, po.County, po.PostCode, po.SentMail, po.Status " +
+            query = string.Format("SELECT po.OrderNo, po.SupplierNo, sp.SupplierName, po.StockSite, po.StockName, po.OrderDate, po.Note, po.Address, po.County, po.PostCode, po.SentMail, po.Status " +
                 "FROM PurchaseOrder po " +
                 "JOIN Supplier sp ON po.OrderNo = '{0}' AND po.SupplierNo = sp.SupplierNo " +
                 "ORDER BY po.OrderNo; ", no);
@@ -98,8 +99,9 @@ namespace ShopAPI.Repositories
                 {
                     return true;
                 }
+                else
+                    return false;
             }
-            return false;
         }
 
         public bool Delete(int no)
@@ -115,8 +117,9 @@ namespace ShopAPI.Repositories
                 {
                     return true;
                 }
+                else
+                    return false;
             }
-            return false;
         }
     }
 }

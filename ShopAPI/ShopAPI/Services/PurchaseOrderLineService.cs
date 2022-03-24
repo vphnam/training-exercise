@@ -30,7 +30,8 @@ namespace ShopAPI.Services
             bool res = _polRepo.Create(pol);
             if (res == true)
                 return new JsonResult("Inserted new record to purchase order line table successfully");
-            return new JsonResult("Something went wrong");
+            else
+                return new JsonResult("Something went wrong");
         }
 
         public JsonResult Delete(int no)
@@ -38,7 +39,8 @@ namespace ShopAPI.Services
             bool res = _polRepo.Delete(no);
             if (res == true)
                 return new JsonResult("Deleted record in purchase order line table successfully");
-            return new JsonResult("Something went wrong");
+            else
+                return new JsonResult("Something went wrong");
         }
 
         public JsonResult GetList()
@@ -59,7 +61,8 @@ namespace ShopAPI.Services
             bool res = _polRepo.Update(pol);
             if (res == true)
                 return new JsonResult("Updated record in purchase order line table successfully");
-            return new JsonResult("Something went wrong");
+            else
+                return new JsonResult("Something went wrong");
         }
     }
 }

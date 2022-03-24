@@ -41,7 +41,7 @@ namespace ShopAPI.Controllers
             var res = _poService.Update(po);
             return res;
         }
-        [HttpDelete]
+        [HttpDelete("{no}")]
         public JsonResult Delete(int no)
         {
             var res = _poService.Delete(no);

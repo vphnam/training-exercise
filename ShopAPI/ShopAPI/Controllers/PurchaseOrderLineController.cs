@@ -18,11 +18,6 @@ namespace ShopAPI.Controllers
         {
             return _polService.GetList();
         }
-        [HttpGet("{no}")]
-        public JsonResult Get(int no)
-        {
-            return _polService.GetRecord(no);
-        }
         [HttpGet("purchaseorder/{no}")]
         public JsonResult GetByOrderNo(int no)
         {
@@ -38,7 +33,7 @@ namespace ShopAPI.Controllers
         {
             return _polService.Update(pol);
         }
-        [HttpDelete]
+        [HttpDelete("{no}")]
         public JsonResult Delete(int no)
         {
             return _polService.Delete(no);

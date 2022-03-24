@@ -1,1 +1,30 @@
-<p>pol-list works!</p>
+<table class="table table-striped" id="listPolTable">
+    <thead>
+        <tr>
+            <td>Part Number</td>
+            <td>Part Description</td>
+            <td>Manufacturer</td>
+            <td>Qty Ordered</td>
+            <td>Buy Price</td>  
+            <td>Memo</td>
+            <td>Amount</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let dataItem of polList">
+            <td id="partNo"><input value="{{dataItem.PartNo}}" class="form-control" disabled readonly/></td>
+            <td ><input value="{{dataItem.PartDescription}}" class="form-control"/></td>
+            <td ><input value="{{dataItem.Manufacturer}}" class="form-control"/></td>
+            <td ><input type="number" min="1" max="9999"  class="form-control" 
+                (change)="UpdateTotal(polList,dataItem)" [(ngModel)] = "dataItem.QuantityOrder"/></td>
+            <td ><input type="number" min="1" class="form-control" 
+                (change)="UpdateTotal(polList,dataItem)" [(ngModel)] = "dataItem.BuyPrice"/></td>
+            <td ><input value="{{dataItem.Memo}}" class="form-control"/></td>
+            <td ><input class="form-control" disabled readonly [(ngModel)] = "dataItem.Amount"/></td>
+            <td><button type="button" class="btn btn-light mr-1" (click)="btnDeleteClick(dataItem.PartNo)" data-keyboard="false">Delete</button></td>
+        </tr>
+    </tbody>
+</table>
+<h5 style="text-align: right;">Total purchase order: <span>{{total}}</span></h5>
+<div class="add-new-line-container"><a routerLink="#"> Add new purchase order line</a></div>

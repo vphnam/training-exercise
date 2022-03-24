@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -6,11 +6,17 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './detail-po.component.html',
   styleUrls: ['./detail-po.component.css']
 })
-export class DetailPoComponent implements OnInit {
+export class DetailPoComponent implements OnInit{
+
+
+  orderNoToChildComponent: any;
+
 
   constructor(private route:ActivatedRoute) { }
-  @Input() orderNo: any = "hahaha";
+
+
   ngOnInit(): void {
-    //this.route.params.subscribe(params => {this.orderNo = params;});
+    this.route.params.subscribe(params => {this.orderNoToChildComponent = params['no'];});
   }
+
 }

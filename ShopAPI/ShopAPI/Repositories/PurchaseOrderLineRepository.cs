@@ -35,21 +35,23 @@ namespace ShopAPI.Repositories
             query = string.Format("insert into PurchaseOrderLine(OrderNo, PartDescription, Manufacturer, OrderDate, QuantityOrder, BuyPrice, Memo) " +
                                    "VALUES('{0}','{1}','{2}','{3}','{4}','{5}','{6}'); ", pol.OrderNo, pol.PartDescription, pol.Manufacturer, pol.OrderDate, pol.QuantityOrder, pol.BuyPrice, pol.MeMo);
             sqlDataSource = _configuration.GetConnectionString("ExAppConn");
-            using(SqlConnection myCon = new SqlConnection(sqlDataSource))
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
                 myCon.Open();
                 SqlCommand myCommand = new SqlCommand(query, myCon);
-                if(myCommand.ExecuteNonQuery() > 0)
+                if (myCommand.ExecuteNonQuery() > 0)
                 {
                     return true;
                 }
+                else
+                    return false;
             }
-            return false;
         }
 
         public bool Delete(int no)
         {
-            query = @"delete from PurchaseOrderLine where PartNo = " + no;
+            query = string.Format("delete from dbo.PurchaseOrderLine where PartNo = " + no + " ;");
+            sqlDataSource = _configuration.GetConnectionString("ExAppConn");
             using (SqlConnection myCon = new SqlConnection(sqlDataSource))
             {
                 myCon.Open();
@@ -59,8 +61,9 @@ namespace ShopAPI.Repositories
                     {
                         return true;
                     }
-                }
-                return false;
+                    else
+                        return false;
+                }  
             }
         } 
 
@@ -105,7 +108,7 @@ namespace ShopAPI.Repositories
         }
         public JsonResult GetAllRecordsOfPurchaseOrderByOrderNo(int no)
         {
-            query = @"select PartNo, OrderNo, PartDescription, Manufacturer, OrderDate, QuantityOrder, BuyPrice, Memo 
+            query = @"select PartNo, OrderNo, PartDescription, Manufacturer, OrderDate, QuantityOrder, BuyPrice, Memo, (QuantityOrder * BuyPrice) as Amount
                       from dbo.PurchaseOrderLine
                       where OrderNo = " + no;
             sqlDataSource = _configuration.GetConnectionString("ExAppConn");
@@ -138,8 +141,10 @@ namespace ShopAPI.Repositories
                     {
                         return true;
                     }
+                    else
+                        return false;
                 }
-                return false;
+                
             }
         }
     }
