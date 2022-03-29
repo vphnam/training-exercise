@@ -1,28 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-using ShopAPI.Models;
+
+#nullable disable
 
 namespace ShopAPI.Models
 {
-    public class PurchaseOrder
+    public partial class PurchaseOrder
     {
-        [Key]
         public int OrderNo { get; set; }
-        [ForeignKey("Supplier")]
-        public int SupplierNo { get; set; }
+        public int? SupplierNo { get; set; }
         public string StockSite { get; set; }
         public string StockName { get; set; }
-        public DateTime OrderDate { get; set; }
+        public DateTime? OrderDate { get; set; }
         public string Note { get; set; }
         public string Address { get; set; }
         public string County { get; set; }
         public string PostCode { get; set; }
-        public bool SentMail { get; set; }
-        public bool Status { get; set; }    
-        public List<PurchaseOrderLine> polList { get; set; }
+        public bool? SentMail { get; set; }
+        public bool? Status { get; set; }
+
+        public virtual Supplier SupplierNoNavigation { get; set; }
+        public virtual IEnumerable<PurchaseOrderLine> polList { get; set; }
     }
 }

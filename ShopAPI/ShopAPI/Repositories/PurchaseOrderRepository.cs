@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using ShopAPI.Models;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+
 namespace ShopAPI.Repositories
 {
     public interface IPurchaseOrderRepository
     {
-        JsonResult GetList();
-        JsonResult GetRecord(int no);
+        IEnumerable<PurchaseOrder> GetList();
+        PurchaseOrder GetRecord(int no);
         bool Create(PurchaseOrder po);
         bool Update(PurchaseOrder po);
         bool Delete(int no);
@@ -16,110 +20,80 @@ namespace ShopAPI.Repositories
     }
     public class PurchaseOrderRepository : IPurchaseOrderRepository
     {
-        private readonly IConfiguration _configuration;
+        private ExerciseDbContext db;
         public PurchaseOrderRepository(IConfiguration configuration)
         {
-            _configuration = configuration;
+            db = new ExerciseDbContext(configuration);
         }
-
-        private string query;
-        private DataTable table = new DataTable();
-        private string sqlDataSource;
-        private SqlDataReader myReader;
-        public JsonResult GetList()
+        public IEnumerable<PurchaseOrder> GetList()
         {
-            query = @"SELECT po.OrderNo, po.SupplierNo, sp.SupplierName, po.StockSite, po.StockName, po.OrderDate, po.SentMail
-                    FROM PurchaseOrder po
-                    LEFT JOIN Supplier sp ON po.SupplierNo = sp.SupplierNo
-                    ORDER BY po.OrderNo;";
-            sqlDataSource = _configuration.GetConnectionString("ExAppConn");
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            IEnumerable<PurchaseOrder> poList = db.PurchaseOrders.OrderBy(n => n.OrderNo).ToList();   
+            foreach(PurchaseOrder po in poList)
             {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
+                po.SupplierNoNavigation = db.Suppliers.Find(po.SupplierNo);
             }
-            return new JsonResult(table);
+            return poList;
         }
         public bool Create(PurchaseOrder po)
         {
-            query = string.Format("insert into PurchaseOrder(SupplierNo , StockSite , StockName , OrderDate , Note, Address, County, PostCode, SentMail, Status) " +
-                "VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}')", po.SupplierNo, po.StockSite, po.StockName, po.OrderDate, po.Note, po.Address, po.County, po.PostCode, po.SentMail, 1);
-            sqlDataSource = _configuration.GetConnectionString("ExAppConn");
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            if (po != null)
             {
-                myCon.Open();
-                SqlCommand myCommand = new SqlCommand(query, myCon);
-                if (myCommand.ExecuteNonQuery() > 0)
-                {
-                    return true;
-                }
-                else
-                    return false;
+                db.PurchaseOrders.Add(po);
+                db.SaveChanges();
+                return true;
             }
+            else
+                return false;
         }
 
-        public JsonResult GetRecord(int no)
+        public PurchaseOrder GetRecord(int no)
         {
-            query = string.Format("SELECT po.OrderNo, po.SupplierNo, sp.SupplierName, po.StockSite, po.StockName, po.OrderDate, po.Note, po.Address, po.County, po.PostCode, po.SentMail, po.Status " +
-                "FROM PurchaseOrder po " +
-                "JOIN Supplier sp ON po.OrderNo = '{0}' AND po.SupplierNo = sp.SupplierNo " +
-                "ORDER BY po.OrderNo; ", no);
-            sqlDataSource = _configuration.GetConnectionString("ExAppConn");
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-            return new JsonResult(table);
+            PurchaseOrder poEntity = db.PurchaseOrders.Where(n => n.OrderNo == no).FirstOrDefault();
+            return poEntity;
         }
 
         public bool Update(PurchaseOrder po)
         {
-            query = string.Format("UPDATE PurchaseOrder " +
-                "SET SupplierNo = '{0}', StockSite = '{1}', StockName = '{2}', OrderDate = '{3}', Note = '{4}', Address = '{5}', County = '{6}', PostCode = '{7}', SentMail = '{8}', Status = '{9}' " +
-                "WHERE OrderNo = '{10}'; ", po.SupplierNo, po.StockSite, po.StockName, po.OrderDate, po.Note, po.Address, po.County, po.PostCode, po.SentMail, po.Status, po.OrderNo);
-            sqlDataSource = _configuration.GetConnectionString("ExAppConn");
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            PurchaseOrder poEntity = db.PurchaseOrders.Where(n => n.OrderNo == po.OrderNo).FirstOrDefault();
+            if(po.Status == false)
             {
-                myCon.Open();
-                SqlCommand myCommand = new SqlCommand(query, myCon);
-                if (myCommand.ExecuteNonQuery() > 0)
+                poEntity.Status = po.Status;
+            }
+            else
+            {
+                if (poEntity != null)
                 {
-                    return true;
+                    poEntity.SupplierNo = po.SupplierNo;
+                    poEntity.StockSite = po.StockSite;
+                    poEntity.StockName = po.StockName;
+                    poEntity.OrderDate = po.OrderDate;
+                    poEntity.Note = po.Note;
+                    poEntity.Address = po.Address;
+                    poEntity.County = po.County;
+                    poEntity.PostCode = po.PostCode;
+                    poEntity.SentMail = po.SentMail;
                 }
                 else
+                {
                     return false;
+                }
             }
+            db.PurchaseOrders.Update(poEntity);
+            db.SaveChanges();
+            return true;
         }
 
         public bool Delete(int no)
         {
-            query = @"delete from dbo.PurchaseOrder
-                      where OrderNo = " + no;
-            sqlDataSource = _configuration.GetConnectionString("ExAppConn");
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            PurchaseOrder poEntity = db.PurchaseOrders.Where(n => n.OrderNo == no).FirstOrDefault();
+            if (poEntity != null)
             {
-                myCon.Open();
-                SqlCommand myCommand = new SqlCommand(query, myCon);
-                if (myCommand.ExecuteNonQuery() > 0)
-                {
-                    return true;
-                }
-                else
-                    return false;
+                db.PurchaseOrders.Remove(poEntity);
+                db.SaveChanges();
+                return true;
             }
+            else
+                return false;
         }
     }
 }

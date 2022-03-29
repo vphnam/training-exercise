@@ -12,7 +12,7 @@
     <tbody>
         <tr *ngFor="let dataItem of PurchaseOrderList">
             <td ><a [title]="dataItem.OrderNo" routerLink="/purchase-order/detail-po/{{dataItem.OrderNo}}">{{dataItem.OrderNo}}</a></td>
-            <td>{{dataItem.SupplierName}}</td>
+            <td>{{dataItem.SupplierNoNavigation.SupplierName}}</td>
             <td>{{dataItem.StockSite}}</td>
             <td>{{dataItem.StockName}}</td>
             <td>{{dataItem.OrderDate | date:'longDate'}}</td>

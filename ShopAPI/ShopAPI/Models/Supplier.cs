@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace ShopAPI.Models
 {
-    public class Supplier
+    public partial class Supplier
     {
-        [Key]
+        public Supplier()
+        {
+            PurchaseOrders = new HashSet<PurchaseOrder>();
+        }
+
         public int SupplierNo { get; set; }
         public string SupplierName { get; set; }
+        public string Email { get; set; }
+
+        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
     }
 }

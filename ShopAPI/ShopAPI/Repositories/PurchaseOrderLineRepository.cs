@@ -10,142 +10,94 @@ using System.Threading.Tasks;
 
 namespace ShopAPI.Repositories
 {
+    
     public interface IPurchaseOrderLineRepository
     {
-        JsonResult GetList();
-        JsonResult GetRecord(int no);
-        JsonResult GetAllRecordsOfPurchaseOrderByOrderNo(int no);
+        IEnumerable<PurchaseOrderLine> GetList();
+        PurchaseOrderLine GetRecord(int no);
+        IEnumerable<PurchaseOrderLine> GetAllRecordsOfPurchaseOrderByOrderNo(int no);
+        bool SetQtyAndPriceOfAllGivenPolToZero(IEnumerable<PurchaseOrderLine> polList);
         bool Create(PurchaseOrderLine pol);
         bool Update(PurchaseOrderLine pol);
-        bool Delete(int no);
+        bool Delete(DeletePolModel delPol);
     }
     public class PurchaseOrderLineRepository : IPurchaseOrderLineRepository
     {
-        private readonly IConfiguration _configuration;
-        private string query;
-        private DataTable table = new DataTable();
-        private string sqlDataSource;
-        private SqlDataReader myReader;
+        private ExerciseDbContext db;
         public PurchaseOrderLineRepository(IConfiguration configuration)
         {
-            _configuration = configuration;
+            db = new ExerciseDbContext(configuration);
         }
         public bool Create(PurchaseOrderLine pol)
         {
-            query = string.Format("insert into PurchaseOrderLine(OrderNo, PartDescription, Manufacturer, OrderDate, QuantityOrder, BuyPrice, Memo) " +
-                                   "VALUES('{0}','{1}','{2}','{3}','{4}','{5}','{6}'); ", pol.OrderNo, pol.PartDescription, pol.Manufacturer, pol.OrderDate, pol.QuantityOrder, pol.BuyPrice, pol.MeMo);
-            sqlDataSource = _configuration.GetConnectionString("ExAppConn");
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            if (pol != null)
             {
-                myCon.Open();
-                SqlCommand myCommand = new SqlCommand(query, myCon);
-                if (myCommand.ExecuteNonQuery() > 0)
-                {
-                    return true;
-                }
-                else
-                    return false;
+                db.PurchaseOrderLines.Add(pol);
+                db.SaveChanges();
+                return true;
             }
+            else
+                return false;
         }
 
-        public bool Delete(int no)
+        public bool Delete(DeletePolModel delPol)
         {
-            query = string.Format("delete from dbo.PurchaseOrderLine where PartNo = " + no + " ;");
-            sqlDataSource = _configuration.GetConnectionString("ExAppConn");
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            PurchaseOrderLine pol = db.PurchaseOrderLines.Find(delPol.partNo,delPol.orderNo);
+            if (pol != null)
             {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    if (myCommand.ExecuteNonQuery() > 0)
-                    {
-                        return true;
-                    }
-                    else
-                        return false;
-                }  
+                db.PurchaseOrderLines.Remove(pol);
+                db.SaveChanges();
+                return true;
             }
+            else
+                return false;
         } 
 
-        public JsonResult GetList()
+        public IEnumerable<PurchaseOrderLine> GetList()
         {
-            query = @"select PartNo, OrderNo, PartDescription, Manufacturer, OrderDate, QuantityOrder, BuyPrice, Memo 
-                      from dbo.PurchaseOrderLine 
-                      order by PartNo; ";
-            sqlDataSource = _configuration.GetConnectionString("ExAppConn");
-            using(SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using(SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-            return new JsonResult(table);
+            IEnumerable<PurchaseOrderLine> polList = db.PurchaseOrderLines.ToList();
+            return polList;
         }
 
-        public JsonResult GetRecord(int no)
+        public PurchaseOrderLine GetRecord(int no)
         {
-            query = @"select PartNo, OrderNo, PartDescription, Manufacturer, OrderDate, QuantityOrder, BuyPrice, Memo 
-                      from dbo.PurchaseOrderLine
-                      where PartNo = " + no;
-            sqlDataSource = _configuration.GetConnectionString("ExAppConn");
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-            return new JsonResult(table);
+            PurchaseOrderLine pol = db.PurchaseOrderLines.Find(no);
+            return pol;
+           
         }
-        public JsonResult GetAllRecordsOfPurchaseOrderByOrderNo(int no)
+        public IEnumerable<PurchaseOrderLine> GetAllRecordsOfPurchaseOrderByOrderNo(int no)
         {
-            query = @"select PartNo, OrderNo, PartDescription, Manufacturer, OrderDate, QuantityOrder, BuyPrice, Memo, (QuantityOrder * BuyPrice) as Amount
-                      from dbo.PurchaseOrderLine
-                      where OrderNo = " + no;
-            sqlDataSource = _configuration.GetConnectionString("ExAppConn");
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader);
-                    myReader.Close();
-                    myCon.Close();
-                }
-            }
-            return new JsonResult(table);
+            IEnumerable<PurchaseOrderLine> polList = db.PurchaseOrderLines.Where(n => n.OrderNo == no).ToList();
+            return polList;
         }
 
         public bool Update(PurchaseOrderLine pol)
         {
-            query = String.Format("update PurchaseOrderLine " +
-                "set OrderNo = '{0}', PartDescription = '{1}', Manufacturer = '{2}', OrderDate = '{3}', QuantityOrder = '{4}', BuyPrice = '{5}', Memo = '{6}' " +
-                "WHERE PartNo = '{7}';", pol.OrderNo, pol.PartDescription, pol.Manufacturer, pol.OrderDate, pol.QuantityOrder, pol.BuyPrice, pol.MeMo, pol.PartNo);
-            sqlDataSource = _configuration.GetConnectionString("ExAppConn");
-            using(SqlConnection myCon = new SqlConnection(sqlDataSource))
+            if (pol != null)
             {
-                myCon.Open();
-                using(SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    if(myCommand.ExecuteNonQuery() > 0)
-                    {
-                        return true;
-                    }
-                    else
-                        return false;
-                }
-                
+                db.PurchaseOrderLines.Update(pol);
+                db.SaveChanges();
+                return true;
             }
+            else
+                return false;
+        }
+
+        public bool SetQtyAndPriceOfAllGivenPolToZero(IEnumerable<PurchaseOrderLine> polList)
+        {
+            if (polList != null)
+            {
+                foreach (PurchaseOrderLine pol in polList)
+                {
+                    pol.QuantityOrder = 0;
+                    pol.BuyPrice = 0;
+                    db.PurchaseOrderLines.Update(pol);
+                }
+                db.SaveChanges();
+                return true;
+            }
+            else
+                return false;
         }
     }
 }

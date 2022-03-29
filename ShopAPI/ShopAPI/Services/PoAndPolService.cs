@@ -6,7 +6,7 @@ namespace ShopAPI.Services
 {
     public interface IPoAndPolService
     {
-        JsonResult SaveChanges(PurchaseOrder po);
+        bool SaveChanges(PurchaseOrder po);
     }
     public class PoAndPolService : IPoAndPolService
     {
@@ -17,7 +17,7 @@ namespace ShopAPI.Services
             _poRepo = poRepo;
             _polRepo = polRepo;
         }
-        public JsonResult SaveChanges(PurchaseOrder po)
+        public bool SaveChanges(PurchaseOrder po)
         {
             bool poRespond = _poRepo.Update(po);
             if(poRespond == true)
@@ -26,12 +26,12 @@ namespace ShopAPI.Services
                 {
                     bool polRespond = _polRepo.Update(pol);
                     if (polRespond == false)
-                        return new JsonResult("Something went wrong");
+                        return false;
                 }
-                return new JsonResult("Save changes successfully");
+                return true;
             }
             else
-                return new JsonResult("Something went wrong");
+                return false;
         }
     }
 }

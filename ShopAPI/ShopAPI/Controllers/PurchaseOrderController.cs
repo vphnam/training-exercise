@@ -20,32 +20,42 @@ namespace ShopAPI.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            var list = _poService.GetList();
-            return list;
+            IEnumerable<PurchaseOrder> poList = _poService.GetList();
+            return new JsonResult(poList);
         }
         [HttpGet("{no}")]
         public JsonResult Get(int no)
         {
-            var po = _poService.GetRecord(no);
-            return po;
+            PurchaseOrder po = _poService.GetRecord(no);
+            return new JsonResult(po);
         }
         [HttpPost]
         public JsonResult Post(PurchaseOrder po)
         {
-            var res = _poService.Create(po);
-            return res;
+            bool res = _poService.Create(po);
+            if (res == true)    
+                return new JsonResult("Inserted new purchase order successfully!");
+            else
+                return new JsonResult("Something went wrong");
         }
         [HttpPut]
         public JsonResult Put(PurchaseOrder po)
         {
-            var res = _poService.Update(po);
-            return res;
+            bool res = _poService.Update(po);
+            if (res == true)
+                return new JsonResult("Updated purchase order successfully!");
+            else
+                return new JsonResult("Something went wrong");
         }
         [HttpDelete("{no}")]
         public JsonResult Delete(int no)
         {
-            var res = _poService.Delete(no);
-            return res;
+            bool res = _poService.Delete(no);
+            if (res == true)
+                return new JsonResult("Deleted purchase order successfully!");
+            else
+                return new JsonResult("Something went wrong");
         }
+
     }
 }

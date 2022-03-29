@@ -121,7 +121,6 @@ D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\bin\Debug\net5.0\runtimes\unix\lib\ne
 D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.csproj.AssemblyReference.cache
 D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.GeneratedMSBuildEditorConfig.editorconfig
 D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.AssemblyInfoInputs.cache
 D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.AssemblyInfo.cs
@@ -136,3 +135,4 @@ D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.dll
 D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ref\ShopAPI.dll
 D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.pdb
 D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.genruntimeconfig.cache
+D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.csproj.AssemblyReference.cache

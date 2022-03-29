@@ -4,6 +4,7 @@
             <td>Part Number</td>
             <td>Part Description</td>
             <td>Manufacturer</td>
+            <td>Order Date</td>
             <td>Qty Ordered</td>
             <td>Buy Price</td>  
             <td>Memo</td>
@@ -12,19 +13,45 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let dataItem of polList">
+        <tr *ngFor="let dataItem of this.polList">
             <td id="partNo"><input value="{{dataItem.PartNo}}" class="form-control" disabled readonly/></td>
-            <td ><input value="{{dataItem.PartDescription}}" class="form-control"/></td>
-            <td ><input value="{{dataItem.Manufacturer}}" class="form-control"/></td>
+            <td ><input value="{{dataItem.PartDescription}}" class="form-control" [disabled]="disableAll"/></td>
+            <td ><input value="{{dataItem.Manufacturer}}" class="form-control" [disabled]="disableAll"/></td>
+            <td><input type="text" [(ngModel)]="dataItem.OrderDate" [disabled]="disableAll"/></td>
             <td ><input type="number" min="1" max="9999"  class="form-control" 
-                (change)="UpdateTotal(polList,dataItem)" [(ngModel)] = "dataItem.QuantityOrder"/></td>
+                (change)="UpdateTotal(polList,dataItem)" [(ngModel)] = "dataItem.QuantityOrder" [disabled]="disableAll"/></td>
             <td ><input type="number" min="1" class="form-control" 
-                (change)="UpdateTotal(polList,dataItem)" [(ngModel)] = "dataItem.BuyPrice"/></td>
-            <td ><input value="{{dataItem.Memo}}" class="form-control"/></td>
-            <td ><input class="form-control" disabled readonly [(ngModel)] = "dataItem.Amount"/></td>
-            <td><button type="button" class="btn btn-light mr-1" (click)="btnDeleteClick(dataItem.PartNo)" data-keyboard="false">Delete</button></td>
+                (change)="UpdateTotal(polList,dataItem)" [(ngModel)] = "dataItem.BuyPrice" [disabled]="disableAll"/></td>
+            <td ><input [(ngModel)] ="dataItem.Memo" class="form-control" [disabled]="disableAll"/></td>
+            <td ><input class="form-control" disabled readonly [(ngModel)] = "dataItem.Amount" [disabled]="disableAll"/></td>
+            <td><button type="button" class="btn btn-light mr-1" (click)="btnDeleteClick(dataItem.PartNo, this.no)" data-keyboard="false" 
+                [disabled]="disableAll">-</button></td>
+        </tr>
+        <tr *ngIf="addLineClick">
+            <td [class.disabled] = "disableAll">
+                <select class="form-select form-select-sm mb-3" formControlName="part" (change)="changePartNo($event)">
+                    <option value="">Choose part no</option>
+                    <option *ngFor="let part of parts" value={{part.PartNo}}>
+                        {{part.PartName}}
+                    </option>
+                </select>
+            </td>
+            <td ><input class="form-control" #description [disabled]="disableAll"/></td>
+            <td ><input class="form-control" #manufacturer [disabled]="disableAll"/></td>
+            <td><input type="datetime-local" #orderDate [disabled]="disableAll"/></td>
+            <td ><input type="number" min="1" max="9999"  class="form-control" #qty [disabled]="disableAll"/></td>
+            <td ><input type="number" min="1" class="form-control" #price [disabled]="disableAll"/></td>
+            <td ><input  class="form-control" #memo [disabled]="disableAll"/></td>
+            <td ></td>
+            <td><button type="button" (click)="btnAddClick(description.value, manufacturer.value, orderDate.value, qty.value, price.value, memo.value)" 
+                class="btn btn-light mr-1"  data-keyboard="false" [disabled]="disableAll">Add</button></td>
         </tr>
     </tbody>
+    <tfoot>
+        <tr></tr>
+    </tfoot>
+
 </table>
 <h5 style="text-align: right;">Total purchase order: <span>{{total}}</span></h5>
-<div class="add-new-line-container"><a routerLink="#"> Add new purchase order line</a></div>
+<div class="add-new-line-container"><a routerLink="#" (click)="AddLineBtnClick()" 
+    routerLinkActive="active" [class.disabled] = "disableAll"> Add new purchase order line</a></div>

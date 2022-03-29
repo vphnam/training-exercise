@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShopAPI.Models;
 using ShopAPI.Services;
+using System.Collections.Generic;
 
 namespace ShopAPI.Controllers
 {
@@ -16,27 +17,50 @@ namespace ShopAPI.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-            return _polService.GetList();
+            IEnumerable<PurchaseOrderLine> polList = _polService.GetList();
+            return new JsonResult(polList);
         }
         [HttpGet("purchaseorder/{no}")]
         public JsonResult GetByOrderNo(int no)
         {
-            return _polService.GetAllRecordsOfPurchaseOrderByOrderNo(no);
+            IEnumerable<PurchaseOrderLine> polList = _polService.GetAllRecordsOfPurchaseOrderByOrderNo(no);
+            return new JsonResult(polList);
         }
         [HttpPost]
         public JsonResult Post(PurchaseOrderLine pol)
         {
-            return _polService.Create(pol);
+            bool res = _polService.Create(pol);
+            if(res == true)
+                return new JsonResult("Inserted new purchase order line successfully!");
+            else
+                return new JsonResult("Something went wrong");
         }
         [HttpPut]
         public JsonResult Put(PurchaseOrderLine pol)
         {
-            return _polService.Update(pol);
+            bool res = _polService.Update(pol);
+            if (res == true)
+                return new JsonResult("Updated purchase order line successfully!");
+            else
+                return new JsonResult("Something went wrong");
         }
-        [HttpDelete("{no}")]
-        public JsonResult Delete(int no)
+        [HttpPut("update-list")]
+        public JsonResult Put(List<PurchaseOrderLine> polList)
         {
-            return _polService.Delete(no);
+            bool res = _polService.SetQtyAndPriceOfAllGivenPolToZero(polList);
+            if (res == true)
+                return new JsonResult("Updated purchase order line successfully!");
+            else
+                return new JsonResult("Something went wrong");
+        }
+        [HttpPost("del/")]
+        public JsonResult Delete(DeletePolModel delPol)
+        {
+            bool res = _polService.Delete(delPol);
+            if (res == true)
+                return new JsonResult("Deleted purchase order line successfully!");
+            else
+                return new JsonResult("Something went wrong");
         }
     }
 }

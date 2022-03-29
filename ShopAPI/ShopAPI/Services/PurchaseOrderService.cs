@@ -10,11 +10,11 @@ namespace ShopAPI.Services
 {
     public interface IPurchaseOrderService
     {
-        JsonResult GetList();
-        JsonResult Create(PurchaseOrder po);
-        JsonResult GetRecord(int no);
-        JsonResult Update(PurchaseOrder po);
-        JsonResult Delete(int no);
+        IEnumerable<PurchaseOrder> GetList();
+        bool Create(PurchaseOrder po);
+        PurchaseOrder GetRecord(int no);
+        bool Update(PurchaseOrder po);
+        bool Delete(int no);
     }
     public class PurchaseOrderService : IPurchaseOrderService
     {
@@ -22,40 +22,32 @@ namespace ShopAPI.Services
         public PurchaseOrderService(IPurchaseOrderRepository poRepo)
         {
             _poRepo = poRepo;
+ 
         }
-        public JsonResult GetList()
+        public IEnumerable<PurchaseOrder> GetList()
         {
             return _poRepo.GetList();
         }
-        public JsonResult Create(PurchaseOrder po)
+        public bool Create(PurchaseOrder po)
         {
             bool res = _poRepo.Create(po);
-            if (res == true)
-                return new JsonResult("Inserted new record to purchase order table successfully");
-            else
-                return new JsonResult("Something went wrong");
+            return res;
         }
-        public JsonResult GetRecord(int no)
+        public PurchaseOrder GetRecord(int no)
         {
             return _poRepo.GetRecord(no);
         }
 
-        public JsonResult Update(PurchaseOrder po)
+        public bool Update(PurchaseOrder po)
         {
             bool res = _poRepo.Update(po);
-            if (res == true)
-                return new JsonResult("Updated record in purchase order table successfully");
-            else
-                return new JsonResult("Something went wrong");
+            return res;
         }
 
-        public JsonResult Delete(int no)
+        public bool Delete(int no)
         {
             bool res = _poRepo.Delete(no);
-            if (res == true)
-                return new JsonResult("Deleted record in purchase order table successfully");
-            else
-                return new JsonResult("Something went wrong");
+            return res;
         }
     }
 }

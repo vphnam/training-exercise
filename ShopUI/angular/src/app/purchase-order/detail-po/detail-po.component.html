@@ -1,10 +1,10 @@
-<app-po-detail-form [no] = "orderNoToChildComponent"></app-po-detail-form>
-<app-pol-list [no] = "orderNoToChildComponent"></app-pol-list>
-
+<app-po-detail-form [no] = "orderNoToChildComponent" [disableAll]="disableAllToChildComponent"></app-po-detail-form>
+<app-pol-list [no] = "orderNoToChildComponent" [disableAll]="disableAllToChildComponent"></app-pol-list>
 <div class="button-container">
-    <button class="btn btn-primary float-right m-2">Resend mail</button>
-    <button class="btn btn-primary float-right m-2">Cancel purchase order</button>
-    <button class="btn btn-primary float-right m-2">Save changes</button>
+    <button class="btn btn-primary float-right m-2" routerLink="/purchase-order">Return purchase order list page</button>
+    <button class="btn btn-primary float-right m-2" routerLink="/purchase-order/send-mail" [disabled]="disableAllToChildComponent">Resend mail</button>
+    <button class="btn btn-primary float-right m-2" (click)="cancelPoBtnClick()" [disabled]="disableAllToChildComponent">Cancel purchase order</button>
+    <button class="btn btn-primary float-right m-2" (click)="saveChangesBtnClick()" [disabled]="disableAllToChildComponent">Save changes</button>
 </div>
 
 

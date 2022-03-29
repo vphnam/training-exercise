@@ -11,6 +11,7 @@ import {HttpClientModule} from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PoDetailFormComponent } from './purchase-order/detail-po/po-detail-form/po-detail-form.component';
 import { PolListComponent } from './purchase-order/detail-po/pol-list/pol-list.component';
+import { SendMailComponent } from './purchase-order/send-mail/send-mail.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,7 +19,8 @@ import { PolListComponent } from './purchase-order/detail-po/pol-list/pol-list.c
     ShowPoComponent,
     DetailPoComponent,
     PoDetailFormComponent,
-    PolListComponent
+    PolListComponent,
+    SendMailComponent
   ],
   imports: [
     BrowserModule,

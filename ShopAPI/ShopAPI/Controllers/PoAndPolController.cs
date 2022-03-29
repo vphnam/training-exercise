@@ -21,7 +21,11 @@ namespace ShopAPI.Controllers
         [HttpPost]
         public JsonResult SaveChanges(PurchaseOrder pol)
         {
-            return _poAndPolService.SaveChanges(pol);
+            bool res =  _poAndPolService.SaveChanges(pol);
+            if (res == true)
+                return new JsonResult("Save changes successfully");
+            else
+                return new JsonResult("Something went wrong");
         }
     }
 }

@@ -1,6 +1,10 @@
 #partNo{
-    width: 100px;
+    width: 200px;
 }
 .add-new-line-container{
     text-align: right;
+}
+.disabled{
+    pointer-events: none;
+    cursor: not-allowed;
 }

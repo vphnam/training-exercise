@@ -1,33 +1,33 @@
-<h3 class="d-flex justify-content-center">Purchase Order {{po[0].SupplierNo}}</h3>
+<h3 class="d-flex justify-content-center">Purchase Order {{po.OrderNo}}</h3>
 <div class="container">
-    <div class="row"> 
+    <div class="row">
         <div class="col-md-2">Supplier</div>
-        <div class="col-md-4"><input class="form-control" [value]="po[0].SupplierNo" disabled readonly/></div>
+        <div class="col-md-4"><input class="form-control" name="supplierNo" [(ngModel)]="po.SupplierNo" disabled readonly/></div>
         <div class="col-md-2">Supplier Name</div>
-        <div class="col-md-4"><input class="form-control" [value]="po[0].SupplierName" disabled readonly/></div>
+        <div class="col-md-4"><input class="form-control" [(ngModel)]="po.SupplierName" disabled readonly/></div>
     </div>
     <div class="row">
         <div class="col-md-2">Stock site</div>
-        <div class="col-md-4"><input class="form-control" [value]="po[0].StockSite" disabled readonly/> </div>
+        <div class="col-md-4"><input class="form-control" [(ngModel)]="po.StockSite" disabled readonly/> </div>
         <div class="col-md-2">Stock name</div>
-        <div class="col-md-4"><input class="form-control" [value]="po[0].StockName"/></div>
+        <div class="col-md-4"><input class="form-control" [(ngModel)]="po.StockName" [disabled]="disableAll"/></div>
     </div>
     <div class="row">
         <div class="col-md-2">Order Date</div>
-        <div class="col-md-4"><input class="form-control" [value]="po[0].OrderDate" disabled readonly/></div>
+        <div class="col-md-4"><input class="form-control" [(ngModel)]="po.OrderDate" disabled readonly/></div>
         <div class="col-md-2">Address</div>
-        <div class="col-md-4"><textarea class="form-control">{{po[0].Address}}</textarea></div>
+        <div class="col-md-4"><textarea class="form-control" [(ngModel)]="po.Address" [disabled]="disableAll"></textarea></div>
     </div>
     <div class="row">
         <div class="col-md-2">Note</div>
-        <div class="col-md-4"><textarea class="form-control">{{po[0].Note}}</textarea></div>
+        <div class="col-md-4"><textarea class="form-control" [(ngModel)]="po.Note" [disabled]="disableAll"></textarea></div>
         <div class="col-md-2">County</div>
-        <div class="col-md-4"><input class="form-control" [value]="po[0].County"/></div>
+        <div class="col-md-4"><input class="form-control" [(ngModel)]="po.County" [disabled]="disableAll"/></div>
     </div>
     <div class="row">   
         <div class="col-md-2"></div>
         <div class="col-md-4"></div>
         <div class="col-md-2">PostCode</div>
-        <div class="col-md-4"><input class="form-control" [value]="po[0].PostCode"/></div>
+        <div class="col-md-4"><input class="form-control" [(ngModel)]="po.PostCode" [disabled]="disableAll"/></div>
     </div>
 </div>

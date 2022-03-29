@@ -10,12 +10,13 @@ namespace ShopAPI.Services
 {
     public interface IPurchaseOrderLineService
     {
-        JsonResult GetList();
-        JsonResult Create(PurchaseOrderLine pol);
-        JsonResult GetRecord(int no);
-        JsonResult GetAllRecordsOfPurchaseOrderByOrderNo(int no);
-        JsonResult Update(PurchaseOrderLine pol);
-        JsonResult Delete(int no);
+        IEnumerable<PurchaseOrderLine> GetList();
+        bool Create(PurchaseOrderLine pol);
+        PurchaseOrderLine GetRecord(int no);
+        IEnumerable<PurchaseOrderLine> GetAllRecordsOfPurchaseOrderByOrderNo(int no);
+        bool SetQtyAndPriceOfAllGivenPolToZero(IEnumerable<PurchaseOrderLine> polList);
+        bool Update(PurchaseOrderLine pol);
+        bool Delete(DeletePolModel delPol);
     }
 
     public class PurchaseOrderLineService : IPurchaseOrderLineService
@@ -25,44 +26,37 @@ namespace ShopAPI.Services
         {
             _polRepo = polRepo;
         }
-        public JsonResult Create(PurchaseOrderLine pol)
+        public bool Create(PurchaseOrderLine pol)
         {
-            bool res = _polRepo.Create(pol);
-            if (res == true)
-                return new JsonResult("Inserted new record to purchase order line table successfully");
-            else
-                return new JsonResult("Something went wrong");
+            return _polRepo.Create(pol);
         }
 
-        public JsonResult Delete(int no)
+        public bool Delete(DeletePolModel delPol)
         {
-            bool res = _polRepo.Delete(no);
-            if (res == true)
-                return new JsonResult("Deleted record in purchase order line table successfully");
-            else
-                return new JsonResult("Something went wrong");
+            return _polRepo.Delete(delPol);
         }
 
-        public JsonResult GetList()
+        public IEnumerable<PurchaseOrderLine> GetList()
         {
             return _polRepo.GetList();
         }
 
-        public JsonResult GetRecord(int no)
+        public PurchaseOrderLine GetRecord(int no)
         {
             return _polRepo.GetRecord(no);
         }
-        public JsonResult GetAllRecordsOfPurchaseOrderByOrderNo(int no)
+        public IEnumerable<PurchaseOrderLine> GetAllRecordsOfPurchaseOrderByOrderNo(int no)
         {
             return _polRepo.GetAllRecordsOfPurchaseOrderByOrderNo(no);
         }
-        public JsonResult Update(PurchaseOrderLine pol)
+        public bool Update(PurchaseOrderLine pol)
         {
-            bool res = _polRepo.Update(pol);
-            if (res == true)
-                return new JsonResult("Updated record in purchase order line table successfully");
-            else
-                return new JsonResult("Something went wrong");
+            return _polRepo.Update(pol);
+        }
+
+        public bool SetQtyAndPriceOfAllGivenPolToZero(IEnumerable<PurchaseOrderLine> polList)
+        {
+            return _polRepo.SetQtyAndPriceOfAllGivenPolToZero(polList);
         }
     }
 }
