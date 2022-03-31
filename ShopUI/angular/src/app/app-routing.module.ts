@@ -7,8 +7,8 @@ import { SendMailComponent } from './purchase-order/send-mail/send-mail.componen
 const routes: Routes = [
   {path:'purchase-order', component:PurchaseOrderComponent },
   {path: 'purchase-order/detail-po/:no', component:DetailPoComponent},
-  {path: 'purchase-order/send-mail', component: SendMailComponent}
-];
+  {path: 'purchase-order/send-mail/:no', component: SendMailComponent}
+];  
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

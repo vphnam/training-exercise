@@ -1,34 +1,38 @@
 import { Component, OnInit, Input, Output, AfterViewInit } from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, FormControl, Validators, FormArray} from '@angular/forms';
 import { SharedService } from 'src/app/shared.service';
 import { formatDate } from '@angular/common';
-interface Part{
-  partNo: number;
-  partName: string;
-}
+
 @Component({
   selector: 'app-pol-list',
   templateUrl: './pol-list.component.html',
   styleUrls: ['./pol-list.component.css']
 })
-export class PolListComponent implements OnInit, AfterViewInit{
+export class PolListComponent implements OnInit{
 
   @Input() no: any;
   @Input() disableAll!: boolean;
   addLineClick = false;
-  constructor(private service: SharedService, private formBuilder: FormBuilder) { 
-  }
-  ngAfterViewInit(): void {
-  }
   parts: any;
   partName!: FormGroup;
-  partNo?: number;
 
+  //
   polList: any = [];
   polToAdd: any = {};
   DeletePolModel: any = {};
   total: Number = 0;
+  //
+  partNo? = new FormControl();
+  polListForm: any;
+  //
+  pol:any;
+  //
+  constructor(private service: SharedService, private formBuilder: FormBuilder) {}
+
   ngOnInit(): void {
+    this.polListForm = new FormGroup({
+      pol:new FormArray([])
+    })
     this.refreshPurchaseOrderLineList(this.no);
     this.partName = this.formBuilder.group({part: ['']});
     this.RefreshPartList(this.no);
@@ -85,12 +89,18 @@ export class PolListComponent implements OnInit, AfterViewInit{
   }
   UpdateTotal(PolList: any,Pol: any)
   {
-      Pol.Amount = Pol.QuantityOrder * Pol.BuyPrice;
-      this.total = 0;
-      for(let i = 0; i <= PolList.length; i++)
-      {
-        this.total += PolList[i].Amount;
-      }
+    if(Pol.QuantityOrder < 1)
+      Pol.QuantityOrder = 1   
+    else if(Pol.BuyPrice < 1)
+        Pol.BuyPrice = 1
+    console.log(PolList);
+    console.log(Pol);
+    Pol.Amount = Pol.QuantityOrder * Pol.BuyPrice;
+    this.total = 0;
+    for(let i = 0; i <= PolList.length; i++)
+    {
+      this.total += PolList[i].Amount;
+    }
   }
   
   refreshPurchaseOrderLineList(val: Number){
@@ -102,6 +112,21 @@ export class PolListComponent implements OnInit, AfterViewInit{
         this.total += this.polList[i].Amount;
         this.polList[i].OrderDate = formatDate((this.polList[i].OrderDate), "MM-dd-yyyy HH:mm:ss",'en_US');
       }
+      for(let x in this.polList)
+      {
+        this.polListForm.get('pol').push(new FormGroup({
+          PartNo: new FormControl({value: this.polList[x].PartNo, disabled:true}),
+          OrderNo: new FormControl(this.polList[x].OrderNo,[Validators.required]),
+          PartDescription: new FormControl(this.polList[x].PartDescription,[Validators.required]),
+          Manufacturer: new FormControl(this.polList[x].Manufacturer,[Validators.required]),
+          OrderDate: new FormControl(this.polList[x].OrderDate,[Validators.required]),
+          QuantityOrder: new FormControl(this.polList[x].QuantityOrder,[Validators.required]),
+          BuyPrice: new FormControl(this.polList[x].BuyPrice,[Validators.required]),
+          Memo: new FormControl(this.polList[x].Memo,[Validators.required]),
+          Amount: new FormControl(this.polList[x].Amount,[Validators.required]),
+        }));
+      }
+      console.log("haha: " + JSON.stringify(this.polListForm.value));
     });
   }
 }

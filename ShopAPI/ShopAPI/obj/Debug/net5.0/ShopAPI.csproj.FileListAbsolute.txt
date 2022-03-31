@@ -136,3 +136,7 @@ D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ref\ShopAPI.dll
 D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.pdb
 D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.genruntimeconfig.cache
 D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.csproj.AssemblyReference.cache
+D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\bin\Debug\net5.0\MailKit.dll
+D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\bin\Debug\net5.0\MimeKit.dll
+D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\bin\Debug\net5.0\NETCore.MailKit.dll
+D:\dotnet\TrainingExercise\ShopAPI\ShopAPI\bin\Debug\net5.0\BouncyCastle.Crypto.dll

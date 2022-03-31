@@ -13,8 +13,8 @@ export class SharedService {
   getPurchaseOrderList(): Observable<any[]>{
     return this.http.get<any>(this.APIUrl + '/PurchaseOrder');
   }
-  getOneRecordPurchaseOrderByOrderNo(val: any){
-    return this.http.get<any>(this.APIUrl + '/PurchaseOrder/'+ val);
+  getOneRecordPurchaseOrderByOrderNo(val: any): Observable<any[]>{
+    return this.http.get<any[]>(this.APIUrl + '/PurchaseOrder/'+ val);  
   }
   addPurchaseOrder(val:any){
     return this.http.post(this.APIUrl + '/PurchaseOrder',val);
@@ -33,6 +33,9 @@ export class SharedService {
     return this.http.get<any>(this.APIUrl + '/PurchaseOrderLine');
   }
   getOneRecordPurchaseLineOrder(val: any){
+    return this.http.get<any>(this.APIUrl + '/PurchaseOrderLine', val);
+  } 
+  getPurchaseLineOrder(val: any){
     return this.http.get<any>(this.APIUrl + '/PurchaseOrderLine', val);
   } 
   getRecordsPurchaseLineOrderByOrderNo(val: any){
@@ -64,6 +67,12 @@ export class SharedService {
   Savechanges2Table(val:any){
     return this.http.post(this.APIUrl + '/PoAndPol',val);
   }
+
+  sendMail(val:any){
+    return this.http.post(this.APIUrl + '/Mail',val);
+  }
+  
+
 }
 
 interface Pol{

@@ -5,3 +5,10 @@
     height: 150px;
     max-height: 300px;
 }
+.col-md-8 textarea{
+    height: 150px;
+    max-height: 300px;
+}
+.row{
+    margin-top: 10px;
+}

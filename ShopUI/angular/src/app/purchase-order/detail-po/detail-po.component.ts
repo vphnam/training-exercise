@@ -1,3 +1,4 @@
+import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef, ViewChildren, QueryList} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs';
@@ -25,17 +26,25 @@ export class DetailPoComponent implements OnInit{
   DisableAll()
   {
     this.disableAllToChildComponent = true;
+    this.detailChild.first.disableForm();
   }
   saveChangesBtnClick()
   {
-    this.poToSaveChanges = this.detailChild.first.po;
-    this.poToSaveChanges.polList= (this.polListChild.first.polList);
-    if(confirm('Are you sure to save these changes ?'))
+    if(this.detailChild.first.poDetailForm.valid)
     {
-      this.service.Savechanges2Table(this.poToSaveChanges).subscribe(data => 
+      this.poToSaveChanges = this.detailChild.first.po;
+      this.poToSaveChanges.StockName = this.detailChild.first.poDetailForm.controls['StockName'].value;
+      this.poToSaveChanges.Note = this.detailChild.first.poDetailForm.controls['StockName'].value;
+      this.poToSaveChanges.County = this.detailChild.first.poDetailForm.controls['County'].value;
+      this.poToSaveChanges.PostCode = this.detailChild.first.poDetailForm.controls['PostCode'].value;
+      this.poToSaveChanges.polList= (this.polListChild.first.polList);
+      if(confirm('Are you sure to save these changes ?'))
       {
-        alert(data.toString());
-      }); 
+        this.service.Savechanges2Table(this.poToSaveChanges).subscribe(data => 
+        {
+          alert(data.toString());
+        }); 
+      }
     }
   } 
   cancelPoBtnClick()

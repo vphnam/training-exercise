@@ -16,7 +16,7 @@ namespace ShopAPI.Services
         IEnumerable<PurchaseOrderLine> GetAllRecordsOfPurchaseOrderByOrderNo(int no);
         bool SetQtyAndPriceOfAllGivenPolToZero(IEnumerable<PurchaseOrderLine> polList);
         bool Update(PurchaseOrderLine pol);
-        bool Delete(DeletePolModel delPol);
+        int Delete(DeletePolModel delPol);
     }
 
     public class PurchaseOrderLineService : IPurchaseOrderLineService
@@ -31,7 +31,7 @@ namespace ShopAPI.Services
             return _polRepo.Create(pol);
         }
 
-        public bool Delete(DeletePolModel delPol)
+        public int Delete(DeletePolModel delPol)
         {
             return _polRepo.Delete(delPol);
         }

@@ -18,8 +18,8 @@ namespace ShopAPI.Models
         public string PostCode { get; set; }
         public bool? SentMail { get; set; }
         public bool? Status { get; set; }
-
-        public virtual Supplier SupplierNoNavigation { get; set; }
         public virtual IEnumerable<PurchaseOrderLine> polList { get; set; }
+        public virtual StockSite StockSiteNavigation { get; set; }
+        public virtual Supplier SupplierNoNavigation { get; set; }
     }
 }

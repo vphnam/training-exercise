@@ -56,11 +56,13 @@ namespace ShopAPI.Controllers
         [HttpPost("del/")]
         public JsonResult Delete(DeletePolModel delPol)
         {
-            bool res = _polService.Delete(delPol);
-            if (res == true)
+            int res = _polService.Delete(delPol);
+            if (res == 1)
                 return new JsonResult("Deleted purchase order line successfully!");
-            else
+            else if(res == 2)
                 return new JsonResult("Something went wrong");
+            else
+                return new JsonResult("Error: The PO must have at least one PO line!");
         }
     }
 }

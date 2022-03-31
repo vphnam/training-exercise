@@ -19,7 +19,7 @@ namespace ShopAPI.Repositories
         bool SetQtyAndPriceOfAllGivenPolToZero(IEnumerable<PurchaseOrderLine> polList);
         bool Create(PurchaseOrderLine pol);
         bool Update(PurchaseOrderLine pol);
-        bool Delete(DeletePolModel delPol);
+        int Delete(DeletePolModel delPol);
     }
     public class PurchaseOrderLineRepository : IPurchaseOrderLineRepository
     {
@@ -40,17 +40,25 @@ namespace ShopAPI.Repositories
                 return false;
         }
 
-        public bool Delete(DeletePolModel delPol)
+        public int Delete(DeletePolModel delPol)
         {
             PurchaseOrderLine pol = db.PurchaseOrderLines.Find(delPol.partNo,delPol.orderNo);
-            if (pol != null)
+            int count = db.PurchaseOrderLines.Where(n => n.OrderNo == delPol.orderNo).Count();
+            if(count <= 1)
             {
-                db.PurchaseOrderLines.Remove(pol);
-                db.SaveChanges();
-                return true;
+                return 3;
             }
             else
-                return false;
+            {
+                if (pol != null)
+                {
+                    db.PurchaseOrderLines.Remove(pol);
+                    db.SaveChanges();
+                    return 1;
+                }
+                else
+                    return 2;
+            }
         } 
 
         public IEnumerable<PurchaseOrderLine> GetList()

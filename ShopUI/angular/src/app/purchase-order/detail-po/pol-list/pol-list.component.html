@@ -14,14 +14,14 @@
     </thead>
     <tbody>
         <tr *ngFor="let dataItem of this.polList">
-            <td id="partNo"><input value="{{dataItem.PartNo}}" class="form-control" disabled readonly/></td>
-            <td ><input value="{{dataItem.PartDescription}}" class="form-control" [disabled]="disableAll"/></td>
-            <td ><input value="{{dataItem.Manufacturer}}" class="form-control" [disabled]="disableAll"/></td>
+            <td id="partNo"><input [(ngModel)]="dataItem.PartNo" class="form-control" disabled readonly/></td>
+            <td ><input [(ngModel)]="dataItem.PartDescription" class="form-control" [disabled]="disableAll"/></td>
+            <td ><input [(ngModel)]="dataItem.Manufacturer" class="form-control" [disabled]="disableAll"/></td>
             <td><input type="text" [(ngModel)]="dataItem.OrderDate" [disabled]="disableAll"/></td>
             <td ><input type="number" min="1" max="9999"  class="form-control" 
                 (change)="UpdateTotal(polList,dataItem)" [(ngModel)] = "dataItem.QuantityOrder" [disabled]="disableAll"/></td>
             <td ><input type="number" min="1" class="form-control" 
-                (change)="UpdateTotal(polList,dataItem)" [(ngModel)] = "dataItem.BuyPrice" [disabled]="disableAll"/></td>
+                (change)="UpdateTotal(polList,dataItem)" [(ngModel)] = "dataItem.BuyPrice" [disabled]="disableAll" /></td>
             <td ><input [(ngModel)] ="dataItem.Memo" class="form-control" [disabled]="disableAll"/></td>
             <td ><input class="form-control" disabled readonly [(ngModel)] = "dataItem.Amount" [disabled]="disableAll"/></td>
             <td><button type="button" class="btn btn-light mr-1" (click)="btnDeleteClick(dataItem.PartNo, this.no)" data-keyboard="false" 
@@ -30,7 +30,7 @@
         <tr *ngIf="addLineClick">
             <td [class.disabled] = "disableAll">
                 <select class="form-select form-select-sm mb-3" formControlName="part" (change)="changePartNo($event)">
-                    <option value="">Choose part no</option>
+                    <option value="">CHOOSE PART NO</option>
                     <option *ngFor="let part of parts" value={{part.PartNo}}>
                         {{part.PartName}}
                     </option>

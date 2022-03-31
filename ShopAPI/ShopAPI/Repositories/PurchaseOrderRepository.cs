@@ -49,6 +49,8 @@ namespace ShopAPI.Repositories
         public PurchaseOrder GetRecord(int no)
         {
             PurchaseOrder poEntity = db.PurchaseOrders.Where(n => n.OrderNo == no).FirstOrDefault();
+            poEntity.SupplierNoNavigation = db.Suppliers.Find(poEntity.SupplierNo);
+            poEntity.StockSiteNavigation = db.StockSites.Find(poEntity.StockSite);
             return poEntity;
         }
 

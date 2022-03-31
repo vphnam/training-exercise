@@ -1,33 +1,54 @@
-<h3 class="d-flex justify-content-center">Purchase Order {{po.OrderNo}}</h3>
-<div class="container">
+<div class="container" [formGroup]="poDetailForm">
     <div class="row">
         <div class="col-md-2">Supplier</div>
-        <div class="col-md-4"><input class="form-control" name="supplierNo" [(ngModel)]="po.SupplierNo" disabled readonly/></div>
+        <div class="col-md-4"><input class="form-control" formControlName="SupplierNo" readonly/></div>
         <div class="col-md-2">Supplier Name</div>
-        <div class="col-md-4"><input class="form-control" [(ngModel)]="po.SupplierName" disabled readonly/></div>
+        <div class="col-md-4"><input class="form-control" formControlName="SupplierName" readonly/></div>
     </div>
     <div class="row">
         <div class="col-md-2">Stock site</div>
-        <div class="col-md-4"><input class="form-control" [(ngModel)]="po.StockSite" disabled readonly/> </div>
+        <div class="col-md-4"><input class="form-control" formControlName="StockSite"  readonly/> </div>
         <div class="col-md-2">Stock name</div>
-        <div class="col-md-4"><input class="form-control" [(ngModel)]="po.StockName" [disabled]="disableAll"/></div>
+        <div class="col-md-4"><input class="form-control" formControlName="StockName"/></div>
     </div>
     <div class="row">
         <div class="col-md-2">Order Date</div>
-        <div class="col-md-4"><input class="form-control" [(ngModel)]="po.OrderDate" disabled readonly/></div>
-        <div class="col-md-2">Address</div>
-        <div class="col-md-4"><textarea class="form-control" [(ngModel)]="po.Address" [disabled]="disableAll"></textarea></div>
+        <div class="col-md-4"><input class="form-control" formControlName="OrderDate" readonly/></div>
+        <div class="col-md-2">Address<span class="text-danger">*</span> :</div>
+        <div class="col-md-4"><textarea class="form-control" formControlName="Address"></textarea></div>
     </div>
-    <div class="row">
-        <div class="col-md-2">Note</div>
-        <div class="col-md-4"><textarea class="form-control" [(ngModel)]="po.Note" [disabled]="disableAll"></textarea></div>
-        <div class="col-md-2">County</div>
-        <div class="col-md-4"><input class="form-control" [(ngModel)]="po.County" [disabled]="disableAll"/></div>
-    </div>
-    <div class="row">   
+    <div class="row" *ngIf="poDetailForm.controls['Address'].invalid && poDetailForm.controls['Address'].touched">
         <div class="col-md-2"></div>
         <div class="col-md-4"></div>
-        <div class="col-md-2">PostCode</div>
-        <div class="col-md-4"><input class="form-control" [(ngModel)]="po.PostCode" [disabled]="disableAll"/></div>
+        <div class="col-md-2"></div>
+        <div class="col-md-4">
+            <small class="text-danger">Address is required</small>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column col-md-6">
+            <div class="row">
+                <div class="col-md-4">Note</div>
+                <div class="col-md-8"><textarea class="form-control" formControlName="Note"></textarea></div>
+            </div>
+        </div>
+        <div class="column col-md-6">
+            <div class="row">
+                <div class="col-md-4">County<span class="text-danger">*</span> :</div>
+                <div class="col-md-8"><input class="form-control" formControlName="County"/></div>
+            </div>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-8"><small class="text-danger" *ngIf="poDetailForm.controls['County'].invalid && poDetailForm.controls['County'].touched">Address is required</small></div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">PostCode<span class="text-danger">*</span> :</div>
+                <div class="col-md-8"><input class="form-control" formControlName="PostCode"/></div>
+            </div>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-8"><small class="text-danger" *ngIf="poDetailForm.controls['PostCode'].invalid && poDetailForm.controls['PostCode'].touched">PostCode is required</small></div>
+            </div>
+        </div>
     </div>
 </div>

@@ -24,13 +24,14 @@ namespace ShopAPI.Models
         public virtual DbSet<Part> Parts { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual DbSet<PurchaseOrderLine> PurchaseOrderLines { get; set; }
+        public virtual DbSet<StockSite> StockSites { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            dataSource = _configuration.GetConnectionString("ExAppConn");
             if (!optionsBuilder.IsConfigured)
             {
+                dataSource = _configuration.GetConnectionString("ExAppConn");
                 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer(dataSource);
             }
@@ -68,6 +69,11 @@ namespace ShopAPI.Models
 
                 entity.Property(e => e.StockSite).HasMaxLength(50);
 
+                entity.HasOne(d => d.StockSiteNavigation)
+                    .WithMany(p => p.PurchaseOrders)
+                    .HasForeignKey(d => d.StockSite)
+                    .HasConstraintName("FK_StockSite_PO_StockSite");
+
                 entity.HasOne(d => d.SupplierNoNavigation)
                     .WithMany(p => p.PurchaseOrders)
                     .HasForeignKey(d => d.SupplierNo)
@@ -94,6 +100,19 @@ namespace ShopAPI.Models
                     .HasForeignKey(d => d.PartNo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_pol_part");
+            });
+
+            modelBuilder.Entity<StockSite>(entity =>
+            {
+                entity.HasKey(e => e.StockSite1);
+
+                entity.ToTable("StockSite");
+
+                entity.Property(e => e.StockSite1)
+                    .HasMaxLength(50)
+                    .HasColumnName("StockSite");
+
+                entity.Property(e => e.Email).HasMaxLength(200);
             });
 
             modelBuilder.Entity<Supplier>(entity =>
