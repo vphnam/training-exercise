@@ -1,57 +1,91 @@
-<table class="table table-striped" id="listPolTable">
-    <thead>
-        <tr>
-            <td>Part Number</td>
-            <td>Part Description</td>
-            <td>Manufacturer</td>
-            <td>Order Date</td>
-            <td>Qty Ordered</td>
-            <td>Buy Price</td>  
-            <td>Memo</td>
-            <td>Amount</td>
-            <td></td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let dataItem of this.polList">
-            <td id="partNo"><input [(ngModel)]="dataItem.PartNo" class="form-control" disabled readonly/></td>
-            <td ><input [(ngModel)]="dataItem.PartDescription" class="form-control" [disabled]="disableAll"/></td>
-            <td ><input [(ngModel)]="dataItem.Manufacturer" class="form-control" [disabled]="disableAll"/></td>
-            <td><input type="text" [(ngModel)]="dataItem.OrderDate" [disabled]="disableAll"/></td>
-            <td ><input type="number" min="1" max="9999"  class="form-control" 
-                (change)="UpdateTotal(polList,dataItem)" [(ngModel)] = "dataItem.QuantityOrder" [disabled]="disableAll"/></td>
-            <td ><input type="number" min="1" class="form-control" 
-                (change)="UpdateTotal(polList,dataItem)" [(ngModel)] = "dataItem.BuyPrice" [disabled]="disableAll" /></td>
-            <td ><input [(ngModel)] ="dataItem.Memo" class="form-control" [disabled]="disableAll"/></td>
-            <td ><input class="form-control" disabled readonly [(ngModel)] = "dataItem.Amount" [disabled]="disableAll"/></td>
-            <td><button type="button" class="btn btn-light mr-1" (click)="btnDeleteClick(dataItem.PartNo, this.no)" data-keyboard="false" 
-                [disabled]="disableAll">-</button></td>
-        </tr>
-        <tr *ngIf="addLineClick">
-            <td [class.disabled] = "disableAll">
-                <select class="form-select form-select-sm mb-3" formControlName="part" (change)="changePartNo($event)">
-                    <option value="">CHOOSE PART NO</option>
-                    <option *ngFor="let part of parts" value={{part.PartNo}}>
-                        {{part.PartName}}
-                    </option>
-                </select>
-            </td>
-            <td ><input class="form-control" #description [disabled]="disableAll"/></td>
-            <td ><input class="form-control" #manufacturer [disabled]="disableAll"/></td>
-            <td><input type="datetime-local" #orderDate [disabled]="disableAll"/></td>
-            <td ><input type="number" min="1" max="9999"  class="form-control" #qty [disabled]="disableAll"/></td>
-            <td ><input type="number" min="1" class="form-control" #price [disabled]="disableAll"/></td>
-            <td ><input  class="form-control" #memo [disabled]="disableAll"/></td>
-            <td ></td>
-            <td><button type="button" (click)="btnAddClick(description.value, manufacturer.value, orderDate.value, qty.value, price.value, memo.value)" 
-                class="btn btn-light mr-1"  data-keyboard="false" [disabled]="disableAll">Add</button></td>
-        </tr>
-    </tbody>
-    <tfoot>
-        <tr></tr>
-    </tfoot>
+<form [formGroup]="polListForm">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Part Number</td>
+                    <td>Part Description</td>
+                    <td>Manufacturer</td>
+                    <td>Order Date</td>
+                    <td>Qty Ordered</td>
+                    <td>Buy Price</td>  
+                    <td>Memo</td>
+                    <td>Amount</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody formArrayName="pol">
+                <tr *ngFor="let x of this.polListForm.get('pol').controls; let i = index;" [formGroupName]="i">
+                    <td id="partNo"><input formControlName="PartNo" class="form-control" [readonly]="disabled"/></td>
+                    <td ><input formControlName="PartDescription" class="form-control"/></td>
+                    <td ><input formControlName="Manufacturer" class="form-control"/></td>
+                    <td id="orderDate">
+                        <input type="text" formControlName="OrderDate" (change)="onChangeQtyAndPrice(this.polListForm.get('pol'),this.polListForm.get('pol').at(i), i)"/>
+                        <small class="text-danger"  *ngIf="polListForm.get('pol').at(i).controls['OrderDate'].invalid && polListForm.get('pol').at(i).controls['OrderDate'].touched">
+                            *Order date is required and can not be greater than today
+                        </small>
+                    </td>
+                    <td >
+                        <input type="number" min="1" max="9999"  class="form-control"   
+                     (change)="onChangeQtyAndPrice(this.polListForm.get('pol'),this.polListForm.get('pol').at(i), i)" formControlName="QuantityOrder"/>
+                        <small class="text-danger"  *ngIf="polListForm.get('pol').at(i).controls['QuantityOrder'].invalid && polListForm.get('pol').at(i).controls['QuantityOrder'].touched">
+                            *Quantity order must > 0
+                        </small>
+                    </td>
+                    <td >
+                        <input type="number" min="1" class="form-control" 
+                        (change)="onChangeQtyAndPrice(this.polListForm.get('pol'),this.polListForm.get('pol').at(i), i)"  formControlName="BuyPrice"/>
+                        <small class="text-danger"  *ngIf="polListForm.get('pol').at(i).controls['BuyPrice'].invalid && polListForm.get('pol').at(i).controls['BuyPrice'].touched">
+                            *Buy price order must > 0
+                        </small>
+                    </td>
+                    <td ><input formControlName="Memo" class="form-control"/></td>
+                    <td ><input class="form-control" formControlName="Amount" [readonly]="disabled"/></td>
+                    <td><button type="button" (click)="btnDeleteClick(this.polListForm.get('pol').at(i))" 
+                        [disabled]="disableAll" class="btn btn-light mr-1" data-keyboard="false">-</button></td>
+                </tr>        
+            </tbody>
+            <tfoot formArrayName="polAdd">
+                <tr *ngFor="let y of this.polListForm.get('polAdd').controls; let i = index;" [formGroupName]="i">
+                    <td>
+                        <select class="form-select form-select-sm mb-3" formControlName="PartNo">
+                            <option value="">CHOOSE PART NO</option>
+                            <option *ngFor="let part of parts" value={{part.PartNo}}>
+                                {{part.PartName}}
+                            </option>
+                        </select>
+                        <small class="text-danger"  *ngIf="polListForm.get('polAdd').at(i).controls['PartNo'].invalid && polListForm.get('polAdd').at(i).controls['PartNo'].touched">
+                            *PartNo is required
+                        </small>
+                    </td>
+                    <td ><input class="form-control" formControlName="PartDescription"/></td>
+                    <td ><input class="form-control" formControlName="Manufacturer"/></td>
+                    <td style="width: 200px;">
+                        <input type="datetime-local" formControlName="OrderDate"/>
+                        <small class="text-danger"  *ngIf="polListForm.get('polAdd').at(i).controls['OrderDate'].invalid && polListForm.get('polAdd').at(i).controls['OrderDate'].touched">
+                            *Order date can not be greater than today
+                        </small>
+                    </td>
+                    <td >
+                        <input type="number" min="1" max="9999"  class="form-control" formControlName="QuantityOrder"/>
+                        <small class="text-danger"  *ngIf="polListForm.get('polAdd').at(i).controls['QuantityOrder'].invalid && polListForm.get('polAdd').at(i).controls['QuantityOrder'].touched">
+                            *Quantity order must > 0
+                        </small>
+                    </td>
+                    <td >
+                        <input type="number" min="1" class="form-control" formControlName="BuyPrice"/>
+                        <small class="text-danger"  *ngIf="polListForm.get('polAdd').at(i).controls['BuyPrice'].invalid && polListForm.get('polAdd').at(i).controls['BuyPrice'].touched">
+                            *Buy price order must > 0
+                        </small>
+                    </td>
+                    <td ><input  class="form-control" formControlName="Memo"/></td>
+                    <td ></td>
+                    <td><button type="button" (click)="btnAddClick(this.polListForm.get('polAdd').at(i))" 
+                        class="btn btn-light mr-1" [disabled]="disableAll"  data-keyboard="false">Add</button></td>
+                </tr>
+            </tfoot>
+        </table>
 
-</table>
+    </form>
 <h5 style="text-align: right;">Total purchase order: <span>{{total}}</span></h5>
 <div class="add-new-line-container"><a routerLink="#" (click)="AddLineBtnClick()" 
     routerLinkActive="active" [class.disabled] = "disableAll"> Add new purchase order line</a></div>

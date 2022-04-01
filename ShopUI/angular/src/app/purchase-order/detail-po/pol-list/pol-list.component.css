@@ -8,3 +8,6 @@
     pointer-events: none;
     cursor: not-allowed;
 }
+#orderDate{
+    width: 200px;
+}

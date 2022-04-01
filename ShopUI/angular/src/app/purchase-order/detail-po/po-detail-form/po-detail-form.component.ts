@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, Output, AfterViewInit} from '@angular/core';
-import { SharedService } from 'src/app/shared.service';
-import { HttpClient } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SharedService } from 'src/app/shared.service';
+import { formatDate } from '@angular/common';
 @Component({
   selector: 'app-po-detail-form',
   templateUrl: './po-detail-form.component.html',
@@ -43,6 +43,7 @@ export class PoDetailFormComponent implements OnInit {
       this.poDetailForm.patchValue(data);
       this.poDetailForm.controls['SupplierName'].setValue(this.po.SupplierNoNavigation.SupplierName);
       this.poDetailForm.controls['StockSite'].setValue(this.po.StockSiteNavigation.StockSite1);
+      this.poDetailForm.controls['OrderDate'].setValue(formatDate((this.po.OrderDate), "MM-dd-yyyy",'en_US'));
     });
   }
 }

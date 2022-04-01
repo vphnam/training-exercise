@@ -20,13 +20,12 @@ namespace ShopAPI.Controllers
         }
         [HttpPost]
         public JsonResult SendMail(PurchaseOrder po)
-        {   
+        {
             bool res = _sendMailService.SendMail(po);
             if (res == true)
                 return new JsonResult("Send mail successfully!");
             else
                 return new JsonResult("Something went wrong");
-
         }
     }
 }

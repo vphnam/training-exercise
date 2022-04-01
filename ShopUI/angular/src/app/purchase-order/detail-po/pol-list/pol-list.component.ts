@@ -10,8 +10,11 @@ import { formatDate } from '@angular/common';
 })
 export class PolListComponent implements OnInit{
 
+  //parameter from parert
   @Input() no: any;
   @Input() disableAll!: boolean;
+  //
+  disabled!: boolean;
   addLineClick = false;
   parts: any;
   partName!: FormGroup;
@@ -22,7 +25,6 @@ export class PolListComponent implements OnInit{
   DeletePolModel: any = {};
   total: Number = 0;
   //
-  partNo? = new FormControl();
   polListForm: any;
   //
   pol:any;
@@ -30,18 +32,9 @@ export class PolListComponent implements OnInit{
   constructor(private service: SharedService, private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.polListForm = new FormGroup({
-      pol:new FormArray([])
-    })
     this.refreshPurchaseOrderLineList(this.no);
-    this.partName = this.formBuilder.group({part: ['']});
     this.RefreshPartList(this.no);
   }
-  changePartNo(e:any)
-  {
-    this.partNo = e.target.value;
-  }
-
   RefreshPartList(val:any)
   {
     this.service.getPartListNotInPurchaseOrder(val).subscribe((data) => 
@@ -49,35 +42,87 @@ export class PolListComponent implements OnInit{
       this.parts = data;
     });
   }
-  btnAddClick(des: string, manu: string, orderDate: string, qty: any, price: any, memo: string)
-  {
-    this.polToAdd.partNo = this.partNo;
-    this.polToAdd.orderNo = this.no;
-    this.polToAdd.partDescription = des;
-    this.polToAdd.Manufacturer = manu;
-    this.polToAdd.orderDate = formatDate(orderDate, "yyyy-MM-ddTHH:mm:ss",'en_US');
-    this.polToAdd.QuantityOrder = qty;
-    this.polToAdd.BuyPrice = price;
-    this.polToAdd.OrderDate = Date.now.toString;
-    this.polToAdd.MeMo = memo;
-    this.service.addPurchaseOrderLine(this.polToAdd).subscribe(data => 
+  orderDateValidator(d: FormControl){
+    try
+    {
+      var today = new Date();
+      const date = formatDate(today, "MM-dd-yyyy HH:mm:ss",'en_US');
+      const od = formatDate(d.value, "MM-dd-yyyy HH:mm:ss",'en_US');
+      if(date < od){
+        return {orderDateValidator: {invalid:true}};
+      }
+      else
       {
-        alert(data.toString());
-        this.addLineClick = false;
-        this.refreshPurchaseOrderLineList(this.no);
-        this.RefreshPartList(this.no);
-      });   
+        return null;
+      }
+    }
+    catch
+    {
+      return {orderDateValidator: {invalid:true}};
+    }
+  }
+  disableForm()
+  {
+    for(let i = 0; i < this.polListForm.get('pol').length;i++)
+    {
+      this.polListForm.get('pol').at(i).disable();  
+    }
+    this.polListForm.get('polAdd').disable();
+  }
+
+  btnAddClick(e: any)
+  {
+    if(this.polListForm.valid)
+    {
+      this.polListForm.get('polAdd').at(0).controls['OrderNo'].setValue(this.no);
+      this.service.addPurchaseOrderLine(e.value).subscribe(data => 
+        {
+          alert(data.toString());
+          this.addLineClick = false;
+          this.refreshPurchaseOrderLineList(this.no);
+          this.RefreshPartList(this.no);
+        });
+    }
+    else
+    {
+      alert("Please check validation!");
+    }
   }
 
   AddLineBtnClick()
   {
-    this.addLineClick = true;
+    if(this.polListForm.get('polAdd').valid)
+    {
+      this.partName = this.formBuilder.group({part: ['']});
+      this.polListForm.get('polAdd').push(new FormGroup({
+            PartNo: new FormControl('',[Validators.required]),
+            OrderNo: new FormControl(null,[Validators.required]),
+            PartDescription: new FormControl(null,[Validators.required]),
+            Manufacturer: new FormControl(null,[Validators.required]),
+            OrderDate: new FormControl(null,[Validators.required,this.orderDateValidator]),
+            QuantityOrder: new FormControl(null,[Validators.required]),
+            BuyPrice: new FormControl(null,[Validators.required]),
+            Memo: new FormControl(null,[Validators.required]),
+            Amount: new FormControl({value:null, disabled:true}),
+          }));
+    }
+    else
+      alert("Already add new po line!");
   }
-  btnDeleteClick(PartNo: Number, OrderNo: Number)
+  onChangeQtyAndPrice(val: any,e: any, i: number)
   {
-    this.DeletePolModel.partNo = PartNo;
-    this.DeletePolModel.orderNo = OrderNo;
-    if(confirm('Are you sure to delete part no ' + PartNo + ' ?'))
+    e.controls['Amount'].setValue(e.controls['QuantityOrder'].value * e.controls['BuyPrice'].value);
+    this.total = 0;
+    for(let i = 0; i < val.value.length; i++)
+    {
+      this.total += val.at(i).value.Amount;
+    }
+  }
+  btnDeleteClick(e:any)
+  {
+    this.DeletePolModel.PartNo = e.controls['PartNo'].value;
+    this.DeletePolModel.OrderNo = e.controls['OrderNo'].value
+    if(confirm('Are you sure to delete part no ' + e.controls['PartNo'].value + ' ?'))
     {
       this.service.deletePurchaseOrderLine(this.DeletePolModel).subscribe(data => 
       {
@@ -87,22 +132,6 @@ export class PolListComponent implements OnInit{
       }); 
     }
   }
-  UpdateTotal(PolList: any,Pol: any)
-  {
-    if(Pol.QuantityOrder < 1)
-      Pol.QuantityOrder = 1   
-    else if(Pol.BuyPrice < 1)
-        Pol.BuyPrice = 1
-    console.log(PolList);
-    console.log(Pol);
-    Pol.Amount = Pol.QuantityOrder * Pol.BuyPrice;
-    this.total = 0;
-    for(let i = 0; i <= PolList.length; i++)
-    {
-      this.total += PolList[i].Amount;
-    }
-  }
-  
   refreshPurchaseOrderLineList(val: Number){
     this.service.getRecordsPurchaseLineOrderByOrderNo(val).subscribe((data) => 
     {
@@ -112,21 +141,25 @@ export class PolListComponent implements OnInit{
         this.total += this.polList[i].Amount;
         this.polList[i].OrderDate = formatDate((this.polList[i].OrderDate), "MM-dd-yyyy HH:mm:ss",'en_US');
       }
+      this.polListForm = new FormGroup({
+        pol:new FormArray([]),
+        polAdd:new FormArray([])
+      })
       for(let x in this.polList)
       {
         this.polListForm.get('pol').push(new FormGroup({
-          PartNo: new FormControl({value: this.polList[x].PartNo, disabled:true}),
+          PartNo: new FormControl(this.polList[x].PartNo,),
           OrderNo: new FormControl(this.polList[x].OrderNo,[Validators.required]),
           PartDescription: new FormControl(this.polList[x].PartDescription,[Validators.required]),
           Manufacturer: new FormControl(this.polList[x].Manufacturer,[Validators.required]),
-          OrderDate: new FormControl(this.polList[x].OrderDate,[Validators.required]),
+          OrderDate: new FormControl(this.polList[x].OrderDate,[Validators.required,this.orderDateValidator]),
           QuantityOrder: new FormControl(this.polList[x].QuantityOrder,[Validators.required]),
           BuyPrice: new FormControl(this.polList[x].BuyPrice,[Validators.required]),
-          Memo: new FormControl(this.polList[x].Memo,[Validators.required]),
-          Amount: new FormControl(this.polList[x].Amount,[Validators.required]),
+          Memo: new FormControl(this.polList[x].Memo,[Validators.required]),  
+          Amount: new FormControl(this.polList[x].Amount,)
         }));
       }
-      console.log("haha: " + JSON.stringify(this.polListForm.value));
+      this.disabled = true;
     });
   }
 }
