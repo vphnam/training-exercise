@@ -20,23 +20,23 @@
                     <td ><input formControlName="Manufacturer" class="form-control"/></td>
                     <td id="orderDate">
                         <input type="text" formControlName="OrderDate" (change)="onChangeQtyAndPrice(this.polListForm.get('pol'),this.polListForm.get('pol').at(i), i)"/>
-                        <small class="text-danger"  *ngIf="polListForm.get('pol').at(i).controls['OrderDate'].invalid && polListForm.get('pol').at(i).controls['OrderDate'].touched">
-                            *Order date is required and can not be greater than today
-                        </small>
+                        <ng-container  *ngIf="polListForm.get('pol').at(i).controls['OrderDate'].invalid && polListForm.get('pol').at(i).controls['OrderDate'].touched">
+                            <small class="text-danger">*Order date is required and can not be greater than today</small>
+                        </ng-container>
                     </td>
                     <td >
                         <input type="number" min="1" max="9999"  class="form-control"   
                      (change)="onChangeQtyAndPrice(this.polListForm.get('pol'),this.polListForm.get('pol').at(i), i)" formControlName="QuantityOrder"/>
-                        <small class="text-danger"  *ngIf="polListForm.get('pol').at(i).controls['QuantityOrder'].invalid && polListForm.get('pol').at(i).controls['QuantityOrder'].touched">
-                            *Quantity order must > 0
-                        </small>
+                        <ng-container  *ngIf="polListForm.get('pol').at(i).controls['QuantityOrder'].invalid && polListForm.get('pol').at(i).controls['QuantityOrder'].touched">
+                            <small class="text-danger">*Quantity order must > 0</small>
+                        </ng-container>
                     </td>
                     <td >
                         <input type="number" min="1" class="form-control" 
                         (change)="onChangeQtyAndPrice(this.polListForm.get('pol'),this.polListForm.get('pol').at(i), i)"  formControlName="BuyPrice"/>
-                        <small class="text-danger"  *ngIf="polListForm.get('pol').at(i).controls['BuyPrice'].invalid && polListForm.get('pol').at(i).controls['BuyPrice'].touched">
-                            *Buy price order must > 0
-                        </small>
+                        <ng-container *ngIf="polListForm.get('pol').at(i).controls['BuyPrice'].invalid && polListForm.get('pol').at(i).controls['BuyPrice'].touched">
+                            <small class="text-danger">*Buy price order must > 0</small>
+                        </ng-container>
                     </td>
                     <td ><input formControlName="Memo" class="form-control"/></td>
                     <td ><input class="form-control" formControlName="Amount" [readonly]="disabled"/></td>
@@ -53,29 +53,29 @@
                                 {{part.PartName}}
                             </option>
                         </select>
-                        <small class="text-danger"  *ngIf="polListForm.get('polAdd').at(i).controls['PartNo'].invalid && polListForm.get('polAdd').at(i).controls['PartNo'].touched">
-                            *PartNo is required
-                        </small>
+                        <ng-container *ngIf="polListForm.get('polAdd').at(i).controls['PartNo'].invalid && polListForm.get('polAdd').at(i).controls['PartNo'].touched">
+                           <small class="text-danger"> *PartNo is required</small> 
+                        </ng-container>
                     </td>
                     <td ><input class="form-control" formControlName="PartDescription"/></td>
                     <td ><input class="form-control" formControlName="Manufacturer"/></td>
                     <td style="width: 200px;">
                         <input type="datetime-local" formControlName="OrderDate"/>
-                        <small class="text-danger"  *ngIf="polListForm.get('polAdd').at(i).controls['OrderDate'].invalid && polListForm.get('polAdd').at(i).controls['OrderDate'].touched">
-                            *Order date can not be greater than today
-                        </small>
+                        <ng-container  *ngIf="polListForm.get('polAdd').at(i).controls['OrderDate'].invalid && polListForm.get('polAdd').at(i).controls['OrderDate'].touched">
+                            <small class="text-danger">*Order date is required and can not be greater than today</small>
+                        </ng-container>
                     </td>
                     <td >
                         <input type="number" min="1" max="9999"  class="form-control" formControlName="QuantityOrder"/>
-                        <small class="text-danger"  *ngIf="polListForm.get('polAdd').at(i).controls['QuantityOrder'].invalid && polListForm.get('polAdd').at(i).controls['QuantityOrder'].touched">
-                            *Quantity order must > 0
-                        </small>
+                        <ng-container  *ngIf="polListForm.get('polAdd').at(i).controls['QuantityOrder'].invalid && polListForm.get('polAdd').at(i).controls['QuantityOrder'].touched">
+                            <small class="text-danger">*Quantity order must > 0</small>
+                        </ng-container>
                     </td>
                     <td >
                         <input type="number" min="1" class="form-control" formControlName="BuyPrice"/>
-                        <small class="text-danger"  *ngIf="polListForm.get('polAdd').at(i).controls['BuyPrice'].invalid && polListForm.get('polAdd').at(i).controls['BuyPrice'].touched">
-                            *Buy price order must > 0
-                        </small>
+                        <ng-container *ngIf="polListForm.get('polAdd').at(i).controls['BuyPrice'].invalid && polListForm.get('polAdd').at(i).controls['BuyPrice'].touched">
+                            <small class="text-danger">*Buy price order must > 0</small>
+                        </ng-container>
                     </td>
                     <td ><input  class="form-control" formControlName="Memo"/></td>
                     <td ></td>

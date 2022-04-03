@@ -1,26 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using ShopAPI.IRepositories;
 using ShopAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShopAPI.Repositories
 {
-    
-    public interface IPurchaseOrderLineRepository
-    {
-        IEnumerable<PurchaseOrderLine> GetList();
-        PurchaseOrderLine GetRecord(int no);
-        IEnumerable<PurchaseOrderLine> GetAllRecordsOfPurchaseOrderByOrderNo(int no);
-        bool SetQtyAndPriceOfAllGivenPolToZero(IEnumerable<PurchaseOrderLine> polList);
-        bool Create(PurchaseOrderLine pol);
-        bool Update(PurchaseOrderLine pol);
-        int Delete(DeletePolModel delPol);
-    }
     public class PurchaseOrderLineRepository : IPurchaseOrderLineRepository
     {
         private ExerciseDbContext db;
@@ -28,84 +18,58 @@ namespace ShopAPI.Repositories
         {
             db = new ExerciseDbContext(configuration);
         }
-        public bool Create(PurchaseOrderLine pol)
+        public async Task Create(PurchaseOrderLine pol)
         {
-            if (pol != null)
-            {
-                db.PurchaseOrderLines.Add(pol);
-                db.SaveChanges();
-                return true;
-            }
-            else
-                return false;
+            db.PurchaseOrderLines.Add(pol);
+            await db.SaveChangesAsync();
         }
 
-        public int Delete(DeletePolModel delPol)
+        public async Task Delete(DeletePolModel delPol)
         {
-            PurchaseOrderLine pol = db.PurchaseOrderLines.Find(delPol.partNo,delPol.orderNo);
-            int count = db.PurchaseOrderLines.Where(n => n.OrderNo == delPol.orderNo).Count();
-            if(count <= 1)
-            {
-                return 3;
-            }
-            else
-            {
-                if (pol != null)
-                {
-                    db.PurchaseOrderLines.Remove(pol);
-                    db.SaveChanges();
-                    return 1;
-                }
-                else
-                    return 2;
-            }
+            PurchaseOrderLine pol = await db.PurchaseOrderLines.FindAsync(delPol.partNo,delPol.orderNo);
+            db.PurchaseOrderLines.Remove(pol);
+            await db.SaveChangesAsync();
         } 
 
-        public IEnumerable<PurchaseOrderLine> GetList()
+        public async Task<IEnumerable<PurchaseOrderLine>> GetList()
         {
-            IEnumerable<PurchaseOrderLine> polList = db.PurchaseOrderLines.ToList();
-            return polList;
+            return await db.PurchaseOrderLines.ToListAsync();
         }
 
-        public PurchaseOrderLine GetRecord(int no)
+        public async Task<PurchaseOrderLine> GetRecord(int no)
         {
-            PurchaseOrderLine pol = db.PurchaseOrderLines.Find(no);
-            return pol;
-           
+            return await db.PurchaseOrderLines.FindAsync(no);
+
         }
-        public IEnumerable<PurchaseOrderLine> GetAllRecordsOfPurchaseOrderByOrderNo(int no)
+        public async Task<IEnumerable<PurchaseOrderLine>> GetAllRecordsOfPurchaseOrderByOrderNo(int no)
         {
-            IEnumerable<PurchaseOrderLine> polList = db.PurchaseOrderLines.Where(n => n.OrderNo == no).ToList();
-            return polList;
+            return await db.PurchaseOrderLines.Where(n => n.OrderNo == no).ToListAsync();
         }
 
-        public bool Update(PurchaseOrderLine pol)
+        public async Task Update(PurchaseOrderLine pol)
         {
-            if (pol != null)
+            db.PurchaseOrderLines.Update(pol);
+            await db.SaveChangesAsync();
+        }
+
+        public async Task UpdateList(IEnumerable<PurchaseOrderLine> polList)
+        {
+            foreach (PurchaseOrderLine pol in polList)
             {
                 db.PurchaseOrderLines.Update(pol);
-                db.SaveChanges();
-                return true;
             }
-            else
-                return false;
+            await db.SaveChangesAsync();
         }
 
-        public bool SetQtyAndPriceOfAllGivenPolToZero(IEnumerable<PurchaseOrderLine> polList)
+        public async Task SetQtyAndPriceOfAllGivenPolToZero(IEnumerable<PurchaseOrderLine> polList)
         {
-            if (polList != null)
+            foreach (PurchaseOrderLine pol in polList)
             {
-                foreach (PurchaseOrderLine pol in polList)
-                {
-                    pol.QuantityOrder = 0;
-                    pol.BuyPrice = 0;
-                    db.PurchaseOrderLines.Update(pol);
-                }
-                db.SaveChanges();
-                return true;
+                pol.QuantityOrder = 0;
+                pol.BuyPrice = 0;
+                db.PurchaseOrderLines.Update(pol);
             }
-            else
-                return false;
+            await db.SaveChangesAsync();
         }
     }
 }

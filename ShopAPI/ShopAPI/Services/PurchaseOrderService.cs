@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShopAPI.IRepositories;
+using ShopAPI.IServices;
 using ShopAPI.Models;
-using ShopAPI.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,6 @@ using System.Threading.Tasks;
 
 namespace ShopAPI.Services
 {
-    public interface IPurchaseOrderService
-    {
-        IEnumerable<PurchaseOrder> GetList();
-        bool Create(PurchaseOrder po);
-        PurchaseOrder GetRecord(int no);
-        bool Update(PurchaseOrder po);
-        bool Delete(int no);
-    }
     public class PurchaseOrderService : IPurchaseOrderService
     {
         private readonly IPurchaseOrderRepository _poRepo;
@@ -24,30 +17,27 @@ namespace ShopAPI.Services
             _poRepo = poRepo;
  
         }
-        public IEnumerable<PurchaseOrder> GetList()
+        public async Task<IEnumerable<PurchaseOrder>> GetList()
         {
-            return _poRepo.GetList();
+            return await _poRepo.GetList();
         }
-        public bool Create(PurchaseOrder po)
+        public async Task Create(PurchaseOrder po)
         {
-            bool res = _poRepo.Create(po);
-            return res;
+            await _poRepo.Create(po);
         }
-        public PurchaseOrder GetRecord(int no)
+        public async Task<PurchaseOrder> GetRecord(int no)
         {
-            return _poRepo.GetRecord(no);
-        }
-
-        public bool Update(PurchaseOrder po)
-        {
-            bool res = _poRepo.Update(po);
-            return res;
+            return await _poRepo.GetRecord(no);
         }
 
-        public bool Delete(int no)
+        public async Task Update(PurchaseOrder po)
         {
-            bool res = _poRepo.Delete(no);
-            return res;
+            await _poRepo.Update(po);
+        }
+
+        public async Task Delete(int no)
+        {
+            await _poRepo.Delete(no);
         }
     }
 }

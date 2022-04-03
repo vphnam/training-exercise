@@ -1,23 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using ShopAPI.IRepositories;
 using ShopAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShopAPI.Repositories
 {
-    public interface IPurchaseOrderRepository
-    {
-        IEnumerable<PurchaseOrder> GetList();
-        PurchaseOrder GetRecord(int no);
-        bool Create(PurchaseOrder po);
-        bool Update(PurchaseOrder po);
-        bool Delete(int no);
-
-    }
     public class PurchaseOrderRepository : IPurchaseOrderRepository
     {
         private ExerciseDbContext db;
@@ -25,38 +19,32 @@ namespace ShopAPI.Repositories
         {
             db = new ExerciseDbContext(configuration);
         }
-        public IEnumerable<PurchaseOrder> GetList()
+        public async Task<IEnumerable<PurchaseOrder>> GetList()
         {
-            IEnumerable<PurchaseOrder> poList = db.PurchaseOrders.OrderBy(n => n.OrderNo).ToList();   
+            IEnumerable<PurchaseOrder> poList = await db.PurchaseOrders.OrderBy(n => n.OrderNo).ToListAsync();   
             foreach(PurchaseOrder po in poList)
             {
                 po.SupplierNoNavigation = db.Suppliers.Find(po.SupplierNo);
             }
             return poList;
         }
-        public bool Create(PurchaseOrder po)
+        public async Task Create(PurchaseOrder po)
         {
-            if (po != null)
-            {
-                db.PurchaseOrders.Add(po);
-                db.SaveChanges();
-                return true;
-            }
-            else
-                return false;
+            db.PurchaseOrders.Add(po);
+            await db.SaveChangesAsync();
         }
 
-        public PurchaseOrder GetRecord(int no)
+        public async Task<PurchaseOrder> GetRecord(int no)
         {
-            PurchaseOrder poEntity = db.PurchaseOrders.Where(n => n.OrderNo == no).FirstOrDefault();
-            poEntity.SupplierNoNavigation = db.Suppliers.Find(poEntity.SupplierNo);
-            poEntity.StockSiteNavigation = db.StockSites.Find(poEntity.StockSite);
+            PurchaseOrder poEntity = await db.PurchaseOrders.Where(n => n.OrderNo == no).FirstOrDefaultAsync();
+            poEntity.SupplierNoNavigation = await db.Suppliers.FindAsync(poEntity.SupplierNo);
+            poEntity.StockSiteNavigation = await db.StockSites.FindAsync(poEntity.StockSite);
             return poEntity;
         }
 
-        public bool Update(PurchaseOrder po)
+        public async Task Update(PurchaseOrder po)
         {
-            PurchaseOrder poEntity = db.PurchaseOrders.Where(n => n.OrderNo == po.OrderNo).FirstOrDefault();
+            PurchaseOrder poEntity = await db.PurchaseOrders.Where(n => n.OrderNo == po.OrderNo).FirstOrDefaultAsync();
             if(po.Status == false)
             {
                 poEntity.Status = po.Status;
@@ -75,27 +63,19 @@ namespace ShopAPI.Repositories
                     poEntity.PostCode = po.PostCode;
                     poEntity.SentMail = po.SentMail;
                 }
-                else
-                {
-                    return false;
-                }
             }
             db.PurchaseOrders.Update(poEntity);
-            db.SaveChanges();
-            return true;
+            await db.SaveChangesAsync();
         }
 
-        public bool Delete(int no)
+        public async Task Delete(int no)
         {
-            PurchaseOrder poEntity = db.PurchaseOrders.Where(n => n.OrderNo == no).FirstOrDefault();
+            PurchaseOrder poEntity = await db.PurchaseOrders.Where(n => n.OrderNo == no).FirstOrDefaultAsync();
             if (poEntity != null)
             {
                 db.PurchaseOrders.Remove(poEntity);
-                db.SaveChanges();
-                return true;
+                await db.SaveChangesAsync();
             }
-            else
-                return false;
         }
     }
 }

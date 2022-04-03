@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
+using ShopAPI.IRepositories;
+using ShopAPI.IServices;
 using ShopAPI.Repositories;
 using ShopAPI.Services;
 

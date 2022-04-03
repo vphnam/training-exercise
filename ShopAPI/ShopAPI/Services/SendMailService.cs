@@ -1,22 +1,10 @@
-﻿using Microsoft.Extensions.Options;
-using ShopAPI.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ShopAPI.Models;
 using System.Threading.Tasks;
-using MimeKit;
-using System.IO;
-using MailKit.Net.Smtp;
-using MailKit.Security;
-using ShopAPI.Repositories;
-using Microsoft.Extensions.Configuration;
+using ShopAPI.IRepositories;
+using ShopAPI.IServices;
 
 namespace ShopAPI.Services
 {
-    public interface ISendMailService
-    {
-         bool SendMail(PurchaseOrder po);
-    }
     public class SendMailService : ISendMailService
     {
         private readonly IPurchaseOrderRepository _poRepo;
@@ -25,17 +13,9 @@ namespace ShopAPI.Services
             _poRepo = poRepo;
 
         }
-        public bool SendMail(PurchaseOrder po)
+        public async Task SendMail(PurchaseOrder po)
         {
-            if (po != null)
-            {
-                _poRepo.Update(po);
-                return true;
-            }
-            else
-                return false;
-           
-
+            await _poRepo.Update(po);
             /*
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(mailRequestModel.from);

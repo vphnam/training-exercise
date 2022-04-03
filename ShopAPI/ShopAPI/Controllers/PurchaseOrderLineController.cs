@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ShopAPI.IServices;
 using ShopAPI.Models;
-using ShopAPI.Services;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ShopAPI.Controllers
 {
@@ -15,54 +16,66 @@ namespace ShopAPI.Controllers
             _polService = polService;
         }
         [HttpGet]
-        public JsonResult Get()
+        public async Task<IEnumerable<PurchaseOrderLine>> Get()
         {
-            IEnumerable<PurchaseOrderLine> polList = _polService.GetList();
-            return new JsonResult(polList);
+            return await _polService.GetList();
         }
         [HttpGet("purchaseorder/{no}")]
-        public JsonResult GetByOrderNo(int no)
+        public async Task<IEnumerable<PurchaseOrderLine>> GetByOrderNo(int no)
         {
-            IEnumerable<PurchaseOrderLine> polList = _polService.GetAllRecordsOfPurchaseOrderByOrderNo(no);
-            return new JsonResult(polList);
+            return await _polService.GetAllRecordsOfPurchaseOrderByOrderNo(no);
         }
         [HttpPost]
-        public JsonResult Post(PurchaseOrderLine pol)
+        public async Task<string> Post(PurchaseOrderLine pol)
         {
-            bool res = _polService.Create(pol);
-            if(res == true)
-                return new JsonResult("Inserted new purchase order line successfully!");
-            else
-                return new JsonResult("Something went wrong");
+            try
+            {
+                await _polService.Create(pol);
+                return ("Inserted new purchase order line successfully!");
+            }
+            catch
+            {
+                return ("Something went wrong");
+            }
         }
         [HttpPut]
-        public JsonResult Put(PurchaseOrderLine pol)
+        public async Task<string> Put(PurchaseOrderLine pol)
         {
-            bool res = _polService.Update(pol);
-            if (res == true)
-                return new JsonResult("Updated purchase order line successfully!");
-            else
-                return new JsonResult("Something went wrong");
+            try
+            {
+                await _polService.Update(pol);
+                return ("Updated purchase order line successfully!");
+            }
+            catch
+            {
+                return ("Something went wrong");
+            }
         }
         [HttpPut("update-list")]
-        public JsonResult Put(List<PurchaseOrderLine> polList)
+        public async Task<string> Put(List<PurchaseOrderLine> polList)
         {
-            bool res = _polService.SetQtyAndPriceOfAllGivenPolToZero(polList);
-            if (res == true)
-                return new JsonResult("Updated purchase order line successfully!");
-            else
-                return new JsonResult("Something went wrong");
+            try
+            {
+                await _polService.SetQtyAndPriceOfAllGivenPolToZero(polList);
+                return ("Updated purchase order lines successfully!");
+            }
+            catch
+            {
+                return ("Something went wrong");
+            }
         }
         [HttpPost("del/")]
-        public JsonResult Delete(DeletePolModel delPol)
+        public async Task<string> Delete(DeletePolModel delPol)
         {
-            int res = _polService.Delete(delPol);
-            if (res == 1)
-                return new JsonResult("Deleted purchase order line successfully!");
-            else if(res == 2)
-                return new JsonResult("Something went wrong");
-            else
-                return new JsonResult("Error: The PO must have at least one PO line!");
+            try
+            {
+                await _polService.Delete(delPol);
+                return ("Deleted purchase order line successfully!");
+            }
+            catch
+            {
+                return ("Something went wrong");
+            }
         }
     }
 }

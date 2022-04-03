@@ -61,7 +61,7 @@ export class SharedService {
     return this.http.get<any>(this.APIUrl + '/Part');
   }
   getPartListNotInPurchaseOrder(val: any){
-    return this.http.get<any>(this.APIUrl + '/Part/not-in-purchase-order/'+ val);
+    return this.http.get<any>(this.APIUrl + '/Part/'+ val);
   }
 
   //Purchase order and purchase order line http methods

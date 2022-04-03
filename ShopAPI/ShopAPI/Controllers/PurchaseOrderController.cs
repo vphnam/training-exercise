@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using ShopAPI.Models;
-using System.Data;
-using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient;
-using ShopAPI.Services;
+using System.Threading.Tasks;
+using System;
+using ShopAPI.IServices;
 
 namespace ShopAPI.Controllers
 {
@@ -18,43 +17,53 @@ namespace ShopAPI.Controllers
             _poService = poService;
         }
         [HttpGet]
-        public JsonResult Get()
+        public async Task<IEnumerable<PurchaseOrder>> Get()
         {
-            IEnumerable<PurchaseOrder> poList = _poService.GetList();
-            return new JsonResult(poList);
+             return await _poService.GetList();
         }
         [HttpGet("{no}")]
-        public JsonResult Get(int no)
+        public async Task<PurchaseOrder> Get(int no)
         {
-            PurchaseOrder po = _poService.GetRecord(no);
-            return new JsonResult(po);
+            return await _poService.GetRecord(no);
         }
         [HttpPost]
-        public JsonResult Post(PurchaseOrder po)
+        public async Task<string> Post(PurchaseOrder po)
         {
-            bool res = _poService.Create(po);
-            if (res == true)    
-                return new JsonResult("Inserted new purchase order successfully!");
-            else
-                return new JsonResult("Something went wrong");
+            try
+            {
+                await _poService.Create(po);
+                return ("Inserted new purchase order successfully!");
+            }
+            catch(Exception ex)
+            {
+                return ("Error:: "+ ex.Message);
+            }    
         }
         [HttpPut]
-        public JsonResult Put(PurchaseOrder po)
+        public async Task<string> Put(PurchaseOrder po)
         {
-            bool res = _poService.Update(po);
-            if (res == true)
-                return new JsonResult("Updated purchase order successfully!");
-            else
-                return new JsonResult("Something went wrong");
+            try
+            {
+                await _poService.Update(po);
+                return ("Updated purchase order successfully!");
+            }
+            catch
+            {
+                return ("Something went wrong");
+            }
         }
         [HttpDelete("{no}")]
-        public JsonResult Delete(int no)
+        public async Task<string> Delete(int no)
         {
-            bool res = _poService.Delete(no);
-            if (res == true)
-                return new JsonResult("Deleted purchase order successfully!");
-            else
-                return new JsonResult("Something went wrong");
+            try
+            {
+                await _poService.Delete(no);
+                return ("Deleted purchase order successfully!");
+            }
+            catch
+            {
+                return ("Something went wrong");
+            }
         }
 
     }

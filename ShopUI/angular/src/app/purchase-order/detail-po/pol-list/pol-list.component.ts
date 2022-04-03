@@ -85,6 +85,7 @@ export class PolListComponent implements OnInit{
     }
     else
     {
+      this.polListForm.submitted = true;
       alert("Please check validation!");
     }
   }
@@ -96,13 +97,13 @@ export class PolListComponent implements OnInit{
       this.partName = this.formBuilder.group({part: ['']});
       this.polListForm.get('polAdd').push(new FormGroup({
             PartNo: new FormControl('',[Validators.required]),
-            OrderNo: new FormControl(null,[Validators.required]),
-            PartDescription: new FormControl(null,[Validators.required]),
-            Manufacturer: new FormControl(null,[Validators.required]),
+            OrderNo: new FormControl(null),
+            PartDescription: new FormControl(null),
+            Manufacturer: new FormControl(null),
             OrderDate: new FormControl(null,[Validators.required,this.orderDateValidator]),
             QuantityOrder: new FormControl(null,[Validators.required]),
             BuyPrice: new FormControl(null,[Validators.required]),
-            Memo: new FormControl(null,[Validators.required]),
+            Memo: new FormControl(null),
             Amount: new FormControl({value:null, disabled:true}),
           }));
     }

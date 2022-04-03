@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using ShopAPI.IServices;
 using ShopAPI.Models;
-using ShopAPI.Services;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShopAPI.Controllers
@@ -19,16 +16,16 @@ namespace ShopAPI.Controllers
             _partService = partService;
         }
         [HttpGet]
-        public JsonResult Get()
+        public async Task<IEnumerable<Part>> Get()
         {
-            IEnumerable<Part> partList = _partService.GetList();
-            return new JsonResult(partList);
+            Task<IEnumerable<Part>> partList = _partService.GetList();
+            return await partList;
         }
-        [HttpGet("not-in-purchase-order/{no}")]
-        public JsonResult GetPartListNotInPurchaseOrder(int no)
+        [HttpGet("{no}")]
+        public async Task<IEnumerable<Part>> GetPartListNotInPurchaseOrder(int no)
         {
-            IEnumerable<Part> partList = _partService.GetListNotInPurchaseOrder(no);
-            return new JsonResult(partList);
+            Task<IEnumerable<Part>> partList = _partService.GetListNotInPurchaseOrder(no);
+            return await partList;
         }
     }
 }

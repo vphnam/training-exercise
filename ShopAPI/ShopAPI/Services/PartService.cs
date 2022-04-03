@@ -1,17 +1,11 @@
-﻿using ShopAPI.Models;
-using ShopAPI.Repositories;
-using System;
+﻿using ShopAPI.IRepositories;
+using ShopAPI.IServices;
+using ShopAPI.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ShopAPI.Services
 {
-    public interface IPartService
-    {
-        IEnumerable<Part> GetList();
-        IEnumerable<Part> GetListNotInPurchaseOrder(int no);
-    }
     public class PartService : IPartService
     {
         private readonly IPartRepository _partRepo;
@@ -20,12 +14,12 @@ namespace ShopAPI.Services
             _partRepo = partRepo;
 
         }
-        public IEnumerable<Part> GetList()
+        public Task<IEnumerable<Part>> GetList()
         {
             return _partRepo.GetList();
         }
 
-        public IEnumerable<Part> GetListNotInPurchaseOrder(int no)
+        public Task<IEnumerable<Part>> GetListNotInPurchaseOrder(int no)
         {
             return _partRepo.GetListNotInPurchaseOrder(no);
         }
