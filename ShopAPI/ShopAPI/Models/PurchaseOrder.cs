@@ -7,7 +7,7 @@ namespace ShopAPI.Models
 {
     public partial class PurchaseOrder
     {
-        public int OrderNo { get; set; }
+        public int OrderNo { get; set; }    
         public int? SupplierNo { get; set; }
         public string StockSite { get; set; }
         public string StockName { get; set; }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef, ViewChildren, QueryList} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SharedService } from 'src/app/shared.service';
+import { SharedService } from 'src/app/purchase-order/services/shared.service';
 import { PoDetailFormComponent } from './po-detail-form/po-detail-form.component';
 import { PolListComponent } from './pol-list/pol-list.component';
 @Component({

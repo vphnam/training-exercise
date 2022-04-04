@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
+import { EmailValidator } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class SharedService {
   
   //Purchase order http methods
   getPurchaseOrderList(): Observable<any[]>{
-    return this.http.get<any>(this.APIUrl + '/PurchaseOrder');
+    return this.http.get<Po[]>(this.APIUrl + '/PurchaseOrder');
   }
   getOneRecordPurchaseOrderByOrderNo(val: any): Observable<any[]>{
     return this.http.get<any[]>(this.APIUrl + '/PurchaseOrder/'+ val);  
@@ -76,7 +77,7 @@ export class SharedService {
 
 }
 
-interface Pol{
+export interface Pol{
   PartNo: number;
   OrderNo: number;
   PartDescription: string;
@@ -86,4 +87,26 @@ interface Pol{
   OrderDate: string;
   MeMo: string;
   Amount: Number;
+}
+
+export interface Po{
+  OrderNo: number;
+  SupplierNoNavigation:[
+      SupplierNo: number,
+      SupplierName: string,
+      Email: string
+  ],
+  StockSiteNavigation:[
+    StockSite1: string,
+    Email: string,
+    test: string
+  ],
+  StockName: string;
+  OrderDate: Date;
+  Note: string;
+  Address: string,
+  County: string,
+  PostCode: string,
+  SentMail: boolean,
+  Status: boolean
 }

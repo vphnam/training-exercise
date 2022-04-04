@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, AfterViewInit } from '@angular/core';
 import {FormBuilder, FormGroup, FormControl, Validators, FormArray} from '@angular/forms';
-import { SharedService } from 'src/app/shared.service';
+import { SharedService } from 'src/app/purchase-order/services/shared.service';
 import { formatDate } from '@angular/common';
 
 @Component({

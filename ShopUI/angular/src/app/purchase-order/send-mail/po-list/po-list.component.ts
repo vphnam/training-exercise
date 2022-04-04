@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SharedService } from 'src/app/shared.service';
+import { SharedService } from 'src/app/purchase-order/services/shared.service';
 @Component({
   selector: 'app-po-list',
   templateUrl: './po-list.component.html',

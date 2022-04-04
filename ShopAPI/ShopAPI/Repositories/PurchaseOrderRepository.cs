@@ -24,7 +24,8 @@ namespace ShopAPI.Repositories
             IEnumerable<PurchaseOrder> poList = await db.PurchaseOrders.OrderBy(n => n.OrderNo).ToListAsync();   
             foreach(PurchaseOrder po in poList)
             {
-                po.SupplierNoNavigation = db.Suppliers.Find(po.SupplierNo);
+                po.SupplierNoNavigation = await db.Suppliers.FindAsync(po.SupplierNo);
+                po.StockSiteNavigation = await db.StockSites.FindAsync(po.StockSite);
             }
             return poList;
         }

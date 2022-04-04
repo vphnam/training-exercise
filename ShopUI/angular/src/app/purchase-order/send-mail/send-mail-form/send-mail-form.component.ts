@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SharedService } from 'src/app/shared.service';
+import { SharedService } from 'src/app/purchase-order/services/shared.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-send-mail-form',

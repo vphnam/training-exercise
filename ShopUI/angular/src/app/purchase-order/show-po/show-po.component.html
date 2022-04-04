@@ -10,7 +10,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let dataItem of PurchaseOrderList">
+        <tr *ngFor="let dataItem of poList">
             <td ><a [title]="dataItem.OrderNo" routerLink="/purchase-order/detail-po/{{dataItem.OrderNo}}">{{dataItem.OrderNo}}</a></td>
             <td>{{dataItem.SupplierNoNavigation.SupplierName}}</td>
             <td>{{dataItem.StockSite}}</td>
