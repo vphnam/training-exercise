@@ -1,0 +1,21 @@
+
+.col-md-1{
+    margin-top: 20px;
+}
+.col-md-3{
+    margin-top: 20px;
+}
+.form-check-input{
+    width: 20px;
+    height: 20px;
+}
+.paged-table{
+    margin-top: 50px;
+}
+.table-striped{
+    border: black solid;
+    margin-top: 5px;
+}
+.form-select{
+    width: 100px;
+}

@@ -26,6 +26,7 @@ namespace ShopAPI.Repositories
             {
                 po.SupplierNoNavigation = await db.Suppliers.FindAsync(po.SupplierNo);
                 po.StockSiteNavigation = await db.StockSites.FindAsync(po.StockSite);
+                po.polList = await db.PurchaseOrderLines.Where(n => n.OrderNo == po.OrderNo).ToListAsync();
             }
             return poList;
         }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShopAPI.IServices;
 using ShopAPI.Models;
+using ShopAPI.ViewModels;
+using System;
 using System.Threading.Tasks;
 
 namespace ShopAPI.Controllers
@@ -15,16 +17,16 @@ namespace ShopAPI.Controllers
             _poAndPolService = poAndPolService;
         }
         [HttpPost]
-        public async Task<string> SaveChanges(PurchaseOrder pol)
+        public async Task<object> SaveChanges(PurchaseOrder pol)
         {
             try
             {
                 await _poAndPolService.SaveChanges(pol);
-                return ("Save changes successfully");
+                return new ResultViewModel(ViewModels.StatusCode.OK, "Save changes successfully", null);
             }
-            catch
+            catch (Exception ex)
             {
-                return ("Something went wrong");
+                return new ResultViewModel(ViewModels.StatusCode.Error, "Something went wrong", ex);
             }
         }
     }

@@ -4,6 +4,7 @@ using ShopAPI.Models;
 using System.Threading.Tasks;
 using System;
 using ShopAPI.IServices;
+using ShopAPI.ViewModels;
 
 namespace ShopAPI.Controllers
 {
@@ -17,52 +18,52 @@ namespace ShopAPI.Controllers
             _poService = poService;
         }
         [HttpGet]
-        public async Task<IEnumerable<PurchaseOrder>> Get()
+        public async Task<object> Get()
         {
              return await _poService.GetList();
         }
         [HttpGet("{no}")]
-        public async Task<PurchaseOrder> Get(int no)
+        public async Task<object> Get(int no)
         {
             return await _poService.GetRecord(no);
         }
         [HttpPost]
-        public async Task<string> Post(PurchaseOrder po)
+        public async Task<object> Post(PurchaseOrder po)
         {
             try
             {
                 await _poService.Create(po);
-                return ("Inserted new purchase order successfully!");
+                return new ResultViewModel(ViewModels.StatusCode.OK, "Inserted new purchase order successfully!", null); 
             }
             catch(Exception ex)
             {
-                return ("Error:: "+ ex.Message);
+                return new ResultViewModel(ViewModels.StatusCode.Error, "Something went wrong", ex);
             }    
         }
         [HttpPut]
-        public async Task<string> Put(PurchaseOrder po)
+        public async Task<object> Put(PurchaseOrder po)
         {
             try
             {
                 await _poService.Update(po);
-                return ("Updated purchase order successfully!");
+                return new ResultViewModel(ViewModels.StatusCode.OK, "Updated purchase order successfully!", null);
             }
-            catch
+            catch (Exception ex)
             {
-                return ("Something went wrong");
+                return new ResultViewModel(ViewModels.StatusCode.Error, "Something went wrong", ex);
             }
         }
         [HttpDelete("{no}")]
-        public async Task<string> Delete(int no)
+        public async Task<object> Delete(int no)
         {
             try
             {
                 await _poService.Delete(no);
-                return ("Deleted purchase order successfully!");
+                return new ResultViewModel(ViewModels.StatusCode.OK, "Deleted purchase order successfully!", null);
             }
-            catch
+            catch (Exception ex)
             {
-                return ("Something went wrong");
+                return new ResultViewModel(ViewModels.StatusCode.Error, "Something went wrong", ex);
             }
         }
 

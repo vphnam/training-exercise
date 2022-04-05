@@ -1,43 +1,49 @@
-import { Component, OnInit } from '@angular/core';
-import { SharedService } from 'src/app/purchase-order/services/shared.service';
+import { Component, OnInit} from '@angular/core';
+import {SharedService } from 'src/app/services/shared.service';
 import { ActivatedRoute } from '@angular/router';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Po } from 'src/app/services/interface.service';
+
 @Component({
   selector: 'app-show-po',
   templateUrl: './show-po.component.html',
-  styleUrls: ['./show-po.component.css']
+  styleUrls: ['./show-po.component.css'],
 })
 export class ShowPoComponent implements OnInit {
-
   constructor(private service: SharedService, private route: ActivatedRoute) { 
   }
-  poList: any=[];
-  poListForm: any;
+  //search attributes
+  orderNoSearch!: string;
+  supplierNameSearch!: string;
+  stockSiteSearch!: string;
+  stockNameSearch!: string;
+  orderDateSearch!: Date;
+  sentMailSearch!: boolean;
+  //pagination
+    page: number = 1;
+    count: number = 0;
+    tableSize: number = 5;
+    tableSizes: any = [5, 10, 20, 50,100];
+  //
+  poList!: Po[];
+  poSearch: any =[];
+  //poListForm: any;
   ngOnInit(): void {
     this.refreshPurchaseOrderList();
   }
-
+  openDialog(){
+  }
   refreshPurchaseOrderList(){
     this.service.getPurchaseOrderList().subscribe(data => {
       this.poList = data;
-      console.warn(this.poList);
-      this.poListForm = new FormGroup({
-        po:new FormArray([]),
-      })
-      for(let x in this.poList)
-      {
-        this.poListForm.get('po').push(new FormGroup({
-          PartNo: new FormControl(this.poList[x].PartNo,),
-          OrderNo: new FormControl(this.poListForm[x].OrderNo,[Validators.required]),
-          PartDescription: new FormControl(this.poListForm[x].PartDescription,[Validators.required]),
-          Manufacturer: new FormControl(this.poListForm[x].Manufacturer,[Validators.required]),
-          OrderDate: new FormControl(this.poListForm[x].OrderDate,[Validators.required]),
-          QuantityOrder: new FormControl(this.poListForm[x].QuantityOrder,[Validators.required]),
-          BuyPrice: new FormControl(this.poListForm[x].BuyPrice,[Validators.required]),
-          Memo: new FormControl(this.poListForm[x].Memo,[Validators.required]),  
-          Amount: new FormControl(this.poListForm[x].Amount,)
-        }));
-      }
     });
+  }
+  onTableDataChange(event: any){
+    this.page = event;
+    this.refreshPurchaseOrderList();
+  }
+  onTableSizeChange(event: any){
+    this.tableSize = event.target.value;
+    this.page = 1;
+    this.refreshPurchaseOrderList();
   }
 }

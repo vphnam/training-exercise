@@ -16,13 +16,12 @@ namespace ShopAPI.Controllers
             _partService = partService;
         }
         [HttpGet]
-        public async Task<IEnumerable<Part>> Get()
+        public async Task<object> Get()
         {
-            Task<IEnumerable<Part>> partList = _partService.GetList();
-            return await partList;
+            return await _partService.GetList();
         }
         [HttpGet("{no}")]
-        public async Task<IEnumerable<Part>> GetPartListNotInPurchaseOrder(int no)
+        public async Task<object> GetPartListNotInPurchaseOrder(int no)
         {
             Task<IEnumerable<Part>> partList = _partService.GetListNotInPurchaseOrder(no);
             return await partList;

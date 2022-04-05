@@ -47,8 +47,8 @@
             <tfoot formArrayName="polAdd">
                 <tr *ngFor="let y of this.polListForm.get('polAdd').controls; let i = index;" [formGroupName]="i">
                     <td>
-                        <select class="form-select form-select-sm mb-3" formControlName="PartNo">
-                            <option value="">CHOOSE PART NO</option>
+                        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" formControlName="PartNo">
+                            <option value="">CHOOSE PART NO </option>
                             <option *ngFor="let part of parts" value={{part.PartNo}}>
                                 {{part.PartName}}
                             </option>

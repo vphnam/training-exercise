@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShopAPI.IServices;
 using ShopAPI.Models;
+using ShopAPI.ViewModels;
+using System;
 using System.Threading.Tasks;
 
 namespace ShopAPI.Controllers
@@ -15,16 +17,16 @@ namespace ShopAPI.Controllers
             _sendMailService = sendMailService;
         }
         [HttpPost]
-        public async Task<string> SendMail(PurchaseOrder po)
+        public async Task<object> SendMail(PurchaseOrder po)
         {
             try
             {
                 await _sendMailService.SendMail(po);
-                return ("Send mail successfully!");
+                return new ResultViewModel(ViewModels.StatusCode.OK, "Send mail successfully!", null);
             }
-            catch
+            catch (Exception ex)
             {
-                return ("Something went wrong");
+                return new ResultViewModel(ViewModels.StatusCode.Error, "Something went wrong", ex);
             }
         }
     }

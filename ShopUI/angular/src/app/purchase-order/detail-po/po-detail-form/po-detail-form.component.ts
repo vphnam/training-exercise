@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, Output, AfterViewInit} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SharedService } from 'src/app/purchase-order/services/shared.service';
+import { SharedService } from 'src/app/services/shared.service';
 import { formatDate } from '@angular/common';
 @Component({
   selector: 'app-po-detail-form',

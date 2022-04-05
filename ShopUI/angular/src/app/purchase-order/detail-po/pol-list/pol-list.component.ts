@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, AfterViewInit } from '@angular/core';
 import {FormBuilder, FormGroup, FormControl, Validators, FormArray} from '@angular/forms';
-import { SharedService } from 'src/app/purchase-order/services/shared.service';
+import { SharedService } from 'src/app/services/shared.service';
 import { formatDate } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-pol-list',
@@ -72,27 +73,46 @@ export class PolListComponent implements OnInit{
 
   btnAddClick(e: any)
   {
-    if(this.polListForm.valid)
+    if(this.polListForm.get('polAdd').valid)
     {
-      this.polListForm.get('polAdd').at(0).controls['OrderNo'].setValue(this.no);
-      this.service.addPurchaseOrderLine(e.value).subscribe(data => 
-        {
-          alert(data.toString());
-          this.addLineClick = false;
-          this.refreshPurchaseOrderLineList(this.no);
-          this.RefreshPartList(this.no);
-        });
+      Swal.fire({title:'Are you sure to add this purchase order line ?',
+                  icon:'warning',
+                  showDenyButton: true,
+                  confirmButtonText: "Yes",
+                  denyButtonText: "No",}).then((result) => {
+                      if(result.isConfirmed)
+                      {
+                        this.polListForm.get('polAdd').at(0).controls['OrderNo'].setValue(this.no);
+                        this.service.addPurchaseOrderLine(e.value).subscribe(data => 
+                          {
+                              if(data.Status == 200)
+                              {
+                                Swal.fire({icon: 'success', text: data.Message});
+                                this.addLineClick = false;
+                                this.refreshPurchaseOrderLineList(this.no);
+                                this.RefreshPartList(this.no);
+                              }
+                              else if(data.Status == 500)
+                              {
+                                Swal.fire({icon: 'error',title: 'Ooops...', text: data.Message});
+                                this.RefreshPartList(this.no);
+                              }
+                          });
+                      }
+                      else if(result.isDenied){
+
+                      }
+                  });
     }
     else
-    {
-      this.polListForm.submitted = true;
-      alert("Please check validation!");
+    { 
+      Swal.fire("Please check validation!");
     }
   }
 
   AddLineBtnClick()
   {
-    if(this.polListForm.get('polAdd').valid)
+    if(this.polListForm.get('polAdd').length < 1)
     {
       this.partName = this.formBuilder.group({part: ['']});
       this.polListForm.get('polAdd').push(new FormGroup({
@@ -108,7 +128,7 @@ export class PolListComponent implements OnInit{
           }));
     }
     else
-      alert("Already add new po line!");
+      Swal.fire("Already add new po line!");
   }
   onChangeQtyAndPrice(val: any,e: any, i: number)
   {
@@ -123,15 +143,32 @@ export class PolListComponent implements OnInit{
   {
     this.DeletePolModel.PartNo = e.controls['PartNo'].value;
     this.DeletePolModel.OrderNo = e.controls['OrderNo'].value
-    if(confirm('Are you sure to delete part no ' + e.controls['PartNo'].value + ' ?'))
-    {
-      this.service.deletePurchaseOrderLine(this.DeletePolModel).subscribe(data => 
-      {
-        alert(data.toString());
-        this.refreshPurchaseOrderLineList(this.no);
-        this.RefreshPartList(this.no);
-      }); 
-    }
+    Swal.fire({title:'Are you sure to delete purchase order line ' + e.controls['PartNo'].value + ' ?',
+                  icon:'warning',
+                  showDenyButton: true,
+                  confirmButtonText: "Yes",
+                  denyButtonText: "No",}).then((result) => {
+                      if(result.isConfirmed)
+                      {
+                        this.service.deletePurchaseOrderLine(this.DeletePolModel).subscribe(data => 
+                          {
+                              if(data.Status == 200)
+                              {
+                                Swal.fire({icon: 'success', text: data.Message});
+                                this.refreshPurchaseOrderLineList(this.no);
+                                this.RefreshPartList(this.no);
+                              }
+                              else
+                              {
+                                console.warn(JSON.stringify(data));
+                                Swal.fire({icon: 'error',title: 'Ooops...', text: data.Message});
+                              }                     
+                          }); 
+                      }
+                      else if(result.isDenied){
+
+                      }
+                });
   }
   refreshPurchaseOrderLineList(val: Number){
     this.service.getRecordsPurchaseLineOrderByOrderNo(val).subscribe((data) => 
@@ -150,13 +187,13 @@ export class PolListComponent implements OnInit{
       {
         this.polListForm.get('pol').push(new FormGroup({
           PartNo: new FormControl(this.polList[x].PartNo,),
-          OrderNo: new FormControl(this.polList[x].OrderNo,[Validators.required]),
-          PartDescription: new FormControl(this.polList[x].PartDescription,[Validators.required]),
-          Manufacturer: new FormControl(this.polList[x].Manufacturer,[Validators.required]),
+          OrderNo: new FormControl(this.polList[x].OrderNo,),
+          PartDescription: new FormControl(this.polList[x].PartDescription,),
+          Manufacturer: new FormControl(this.polList[x].Manufacturer,),
           OrderDate: new FormControl(this.polList[x].OrderDate,[Validators.required,this.orderDateValidator]),
           QuantityOrder: new FormControl(this.polList[x].QuantityOrder,[Validators.required]),
           BuyPrice: new FormControl(this.polList[x].BuyPrice,[Validators.required]),
-          Memo: new FormControl(this.polList[x].Memo,[Validators.required]),  
+          Memo: new FormControl(this.polList[x].Memo,),  
           Amount: new FormControl(this.polList[x].Amount,)
         }));
       }

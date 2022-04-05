@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef, ViewChildren, QueryList} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SharedService } from 'src/app/purchase-order/services/shared.service';
+import { SharedService } from 'src/app/services/shared.service';
+import Swal from 'sweetalert2';
 import { PoDetailFormComponent } from './po-detail-form/po-detail-form.component';
 import { PolListComponent } from './pol-list/pol-list.component';
 @Component({
@@ -41,31 +42,63 @@ export class DetailPoComponent implements OnInit, AfterViewInit{
       this.poToSaveChanges.County = this.detailChild.first.poDetailForm.controls['County'].value;
       this.poToSaveChanges.PostCode = this.detailChild.first.poDetailForm.controls['PostCode'].value;
       this.poToSaveChanges.polList= (this.polListChild.first.polListForm.get('pol').value);
-      if(confirm('Are you sure to save these changes ?'))
-      {
-        this.service.Savechanges2Table(this.poToSaveChanges).subscribe(data => 
-        {
-          alert(data.toString());
-        }); 
-      }
+      Swal.fire({title:'Are you sure to save these changes ?',
+                  icon:'warning',
+                  showDenyButton: true,
+                  confirmButtonText: "Yes",
+                  denyButtonText: "No",}).then((result) => {
+                      if(result.isConfirmed)
+                      {
+                        this.service.Savechanges2Table(this.poToSaveChanges).subscribe(data => 
+                          {
+                            if(data.Status == 200)
+                              {
+                                Swal.fire({icon: 'success', text: data.Message});
+                              }
+                              else
+                              {
+                                Swal.fire({icon: 'error',title: 'Ooops...', text: data.Message});
+                              }
+                          }); 
+                      }
+                      else if(result.isDenied){
+
+                      }
+                  });
     }
     else
     {
-      alert("Please check validation!");
+      Swal.fire("Please check validation!");
     }
   } 
   cancelPoBtnClick()
   {
-    if(confirm('Are you sure to cancel purchase order ' + this.orderNoToChildComponent + ' ?'))
-    {
-      this.detailChild.first.po.Status = false;
-      this.service.updatePurchaseOrder(this.detailChild.first.po).subscribe(data => 
-        {
-          this.service.setQtyAndPriceOfAllGivenPolToZero(this.polListChild.first.polList).subscribe(data =>{
-            this.DisableAll();
-          });
-        });  
-    }
+    Swal.fire({title:'Are you sure to cancel purchase order ' + this.orderNoToChildComponent + ' ?',
+                  icon:'warning',
+                  showDenyButton: true,
+                  confirmButtonText: "Yes",
+                  denyButtonText: "No",}).then((result) => {
+                      if(result.isConfirmed)
+                      {
+                        this.detailChild.first.po.Status = false;
+                        this.service.updatePurchaseOrder(this.detailChild.first.po).subscribe(data => 
+                          {
+                            this.service.setQtyAndPriceOfAllGivenPolToZero(this.polListChild.first.polList).subscribe(data =>{
+                              if(data.Status == 200)
+                              {
+                                Swal.fire({icon: 'success', text: data.Message});
+                                this.DisableAll();
+                              }
+                              else
+                              {
+                                Swal.fire({icon: 'error',title: 'Ooops...', text: data.Message});
+                              }
+                            });
+                          });  
+                      }
+                      else if(result.isDenied){
+                      }
+                  });
   } 
   ngOnInit(): void {
     this.route.params.subscribe(params => {this.orderNoToChildComponent = params['no'], 
@@ -78,6 +111,7 @@ export class DetailPoComponent implements OnInit, AfterViewInit{
         if(this.po.Status == false)
         {
           this.DisableAll();
+          Swal.fire("This purchase order has been cancelled!");
         }
       });
   }

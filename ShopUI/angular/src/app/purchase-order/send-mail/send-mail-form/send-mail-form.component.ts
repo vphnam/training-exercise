@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SharedService } from 'src/app/purchase-order/services/shared.service';
+import { SharedService } from 'src/app/services/shared.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-send-mail-form',
   templateUrl: './send-mail-form.component.html',
@@ -43,14 +44,10 @@ export class SendMailFormComponent implements OnInit {
   }
   onSubmit()
   {
-    console.warn(this.sendmailForm.value);
-  }
-  SendMail()//val:any)
-  {
-    /*val.SentMail = true;
-    this.service.sendMail(val).subscribe(data => 
+    this.po.SentMail = true;
+    this.service.sendMail(this.po).subscribe(data => 
     {
-        alert(data);
-    });*/
+      Swal.fire(data.Message);
+    });
   }
 }
