@@ -7212,11 +7212,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\dotnet\\TrainingExercise\\ShopAPI\\ShopAPI\\ShopAPI.csproj",
+      "projectUniqueName": "D:\\dotnet\\TrainingExercise\\training-exercise\\ShopAPI\\ShopAPI\\ShopAPI.csproj",
       "projectName": "ShopAPI",
-      "projectPath": "D:\\dotnet\\TrainingExercise\\ShopAPI\\ShopAPI\\ShopAPI.csproj",
+      "projectPath": "D:\\dotnet\\TrainingExercise\\training-exercise\\ShopAPI\\ShopAPI\\ShopAPI.csproj",
       "packagesPath": "C:\\Users\\NAMVU\\.nuget\\packages\\",
-      "outputPath": "D:\\dotnet\\TrainingExercise\\ShopAPI\\ShopAPI\\obj\\",
+      "outputPath": "D:\\dotnet\\TrainingExercise\\training-exercise\\ShopAPI\\ShopAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

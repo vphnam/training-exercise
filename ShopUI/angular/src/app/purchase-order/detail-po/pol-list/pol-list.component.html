@@ -1,5 +1,4 @@
-<form [formGroup]="polListForm">
-        <table class="table table-striped">
+       <table class="table table-striped" [formGroup]="polListForm">
             <thead>
                 <tr>
                     <td>Part Number</td>
@@ -19,12 +18,12 @@
                     <td ><input formControlName="PartDescription" class="form-control"/></td>
                     <td ><input formControlName="Manufacturer" class="form-control"/></td>
                     <td id="orderDate">
-                        <input type="text" formControlName="OrderDate" (change)="onChangeQtyAndPrice(this.polListForm.get('pol'),this.polListForm.get('pol').at(i), i)"/>
-                        <ng-container  *ngIf="polListForm.get('pol').at(i).controls['OrderDate'].invalid && polListForm.get('pol').at(i).controls['OrderDate'].touched">
+                        <input type="datetime-local" class="form-control" #od (focusout)="UpdateDate(polListForm.get('pol').at(i), $event)" [value]="polListForm.get('pol').at(i).controls['OrderDate'].value"/>
+                        <ng-container  *ngIf="polListForm.get('pol').at(i).controls['OrderDate'].invalid">
                             <small class="text-danger">*Order date is required and can not be greater than today</small>
                         </ng-container>
-                    </td>
-                    <td >
+                    </td>   
+                    <td>
                         <input type="number" min="1" max="9999"  class="form-control"   
                      (change)="onChangeQtyAndPrice(this.polListForm.get('pol'),this.polListForm.get('pol').at(i), i)" formControlName="QuantityOrder"/>
                         <ng-container  *ngIf="polListForm.get('pol').at(i).controls['QuantityOrder'].invalid && polListForm.get('pol').at(i).controls['QuantityOrder'].touched">
@@ -44,23 +43,23 @@
                         [disabled]="disableAll" class="btn btn-light mr-1" data-keyboard="false">-</button></td>
                 </tr>        
             </tbody>
-            <tfoot formArrayName="polAdd">
+            <tbody formArrayName="polAdd">
                 <tr *ngFor="let y of this.polListForm.get('polAdd').controls; let i = index;" [formGroupName]="i">
                     <td>
-                        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" formControlName="PartNo">
-                            <option value="">CHOOSE PART NO </option>
+                        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" formControlName="PartNo" >
+                            <option value="" selected></option>
                             <option *ngFor="let part of parts" value={{part.PartNo}}>
                                 {{part.PartName}}
                             </option>
                         </select>
                         <ng-container *ngIf="polListForm.get('polAdd').at(i).controls['PartNo'].invalid && polListForm.get('polAdd').at(i).controls['PartNo'].touched">
                            <small class="text-danger"> *PartNo is required</small> 
-                        </ng-container>
+                        </ng-container> 
                     </td>
                     <td ><input class="form-control" formControlName="PartDescription"/></td>
                     <td ><input class="form-control" formControlName="Manufacturer"/></td>
                     <td style="width: 200px;">
-                        <input type="datetime-local" formControlName="OrderDate"/>
+                        <input type="datetime-local" class="form-control" formControlName="OrderDate"/>
                         <ng-container  *ngIf="polListForm.get('polAdd').at(i).controls['OrderDate'].invalid && polListForm.get('polAdd').at(i).controls['OrderDate'].touched">
                             <small class="text-danger">*Order date is required and can not be greater than today</small>
                         </ng-container>
@@ -82,10 +81,9 @@
                     <td><button type="button" (click)="btnAddClick(this.polListForm.get('polAdd').at(i))" 
                         class="btn btn-light mr-1" [disabled]="disableAll"  data-keyboard="false">Add</button></td>
                 </tr>
-            </tfoot>
+            </tbody>
         </table>
 
-    </form>
 <h5 style="text-align: right;">Total purchase order: <span>{{total}}</span></h5>
 <div class="add-new-line-container"><a routerLink="#" (click)="AddLineBtnClick()" 
     routerLinkActive="active" [class.disabled] = "disableAll"> Add new purchase order line</a></div>

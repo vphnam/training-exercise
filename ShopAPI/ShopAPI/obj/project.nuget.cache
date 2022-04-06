@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xaGFVgMNJ88zXwfcHwZuwNIqNgOVgxtsoQ0026bV0Zol/rPLcwHEc/l4Zf1JK84/P1o0QPHKgiiaziekFlJKog==",
+  "dgSpecHash": "/QNIpCwY3s6HtVVV1/QczbwtAfZmsm3PJ5j6ClR/tjso5v4hRtcdCWdzTWOjvxEcrqiMQ2LoXYDwqc6xWn+KsA==",
   "success": true,
-  "projectFilePath": "D:\\dotnet\\TrainingExercise\\ShopAPI\\ShopAPI\\ShopAPI.csproj",
+  "projectFilePath": "D:\\dotnet\\TrainingExercise\\training-exercise\\ShopAPI\\ShopAPI\\ShopAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\NAMVU\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\NAMVU\\.nuget\\packages\\mailkit\\2.6.0\\mailkit.2.6.0.nupkg.sha512",

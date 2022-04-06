@@ -44,7 +44,10 @@ namespace ShopAPI
             services.AddScoped<IPoAndPolService, PoAndPolService>();
             services.AddScoped<IPartService, PartService>();
             services.AddScoped<IPartRepository, PartRepository>();
-
+            services.AddScoped<ISupplierService, SupplierService>();
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<IStockSiteService, StockSiteService>();
+            services.AddScoped<IStockSiteRepository, StockSiteRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ShopAPI", Version = "v1" });

@@ -15,6 +15,8 @@ import { PoListComponent } from './purchase-order/send-mail/po-list/po-list.comp
 import { SendMailFormComponent } from './purchase-order/send-mail/send-mail-form/send-mail-form.component';
 import { SearchfilterPipe } from './pipe/searchfilter.pipe';
 import { NgxPaginationModule} from 'ngx-pagination';
+import { AddPoComponent } from './purchase-order/show-po/add-po/add-po.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +28,8 @@ import { NgxPaginationModule} from 'ngx-pagination';
     SendMailComponent,
     PoListComponent,
     SendMailFormComponent,
-    SearchfilterPipe
+    SearchfilterPipe,
+    AddPoComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +37,8 @@ import { NgxPaginationModule} from 'ngx-pagination';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgbModule
   ],
   providers: [SharedService],
   bootstrap: [AppComponent]

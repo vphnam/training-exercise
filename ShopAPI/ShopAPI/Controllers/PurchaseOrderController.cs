@@ -33,12 +33,13 @@ namespace ShopAPI.Controllers
             try
             {
                 await _poService.Create(po);
-                return new ResultViewModel(ViewModels.StatusCode.OK, "Inserted new purchase order successfully!", null); 
+                int id = po.OrderNo;
+                return new ResultViewModel(ViewModels.StatusCode.OK, "Inserted new purchase order successfully!", po); 
             }
             catch(Exception ex)
             {
                 return new ResultViewModel(ViewModels.StatusCode.Error, "Something went wrong", ex);
-            }    
+            }
         }
         [HttpPut]
         public async Task<object> Put(PurchaseOrder po)

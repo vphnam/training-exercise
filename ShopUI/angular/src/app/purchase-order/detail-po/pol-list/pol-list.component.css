@@ -14,3 +14,12 @@
 .form-select{
     font-size: medium;
 }
+select{
+    max-height: 300px;
+    overflow-y: auto;
+}
+option{
+    max-height: 300px;
+    overflow-y: auto;
+}
+

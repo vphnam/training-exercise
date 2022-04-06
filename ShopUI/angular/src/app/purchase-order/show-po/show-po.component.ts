@@ -1,23 +1,31 @@
-import { Component, OnInit} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {SharedService } from 'src/app/services/shared.service';
 import { ActivatedRoute } from '@angular/router';
 import { Po } from 'src/app/services/interface.service';
-
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
+import { AddPoComponent } from './add-po/add-po.component';
 @Component({
   selector: 'app-show-po',
   templateUrl: './show-po.component.html',
   styleUrls: ['./show-po.component.css'],
 })
 export class ShowPoComponent implements OnInit {
-  constructor(private service: SharedService, private route: ActivatedRoute) { 
+  constructor(private service: SharedService, private route: ActivatedRoute, private modalService: NgbModal) { 
+  }
+  openDialog(content: any) {
+    this.modalService.open(content, {size: 'xl'}).result.then((result) => {
+    }, (reason) => {
+      
+    });
   }
   //search attributes
   orderNoSearch!: string;
   supplierNameSearch!: string;
   stockSiteSearch!: string;
   stockNameSearch!: string;
-  orderDateSearch!: Date;
-  sentMailSearch!: boolean;
+  orderDateSearch!: any;
+  sentMailSearch!: any;
   //pagination
     page: number = 1;
     count: number = 0;
@@ -26,11 +34,26 @@ export class ShowPoComponent implements OnInit {
   //
   poList!: Po[];
   poSearch: any =[];
+  //
+  closeModal: boolean = false;
+  
   //poListForm: any;
   ngOnInit(): void {
     this.refreshPurchaseOrderList();
   }
-  openDialog(){
+  HiddenModal(e:any)
+  {
+     console.warn("co vo day ko troi");
+     this.modalService.dismissAll();
+  }
+  refreshFilterBtnClick()
+  {
+    this.orderNoSearch = '';
+    this.supplierNameSearch = '';
+    this.stockSiteSearch = '';
+    this.stockNameSearch = '';
+    this.orderDateSearch = undefined;
+    this.sentMailSearch = undefined;
   }
   refreshPurchaseOrderList(){
     this.service.getPurchaseOrderList().subscribe(data => {

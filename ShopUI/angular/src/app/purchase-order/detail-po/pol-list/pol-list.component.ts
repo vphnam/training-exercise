@@ -3,13 +3,13 @@ import {FormBuilder, FormGroup, FormControl, Validators, FormArray} from '@angul
 import { SharedService } from 'src/app/services/shared.service';
 import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
-
 @Component({
   selector: 'app-pol-list',
   templateUrl: './pol-list.component.html',
   styleUrls: ['./pol-list.component.css']
 })
 export class PolListComponent implements OnInit{
+
 
   //parameter from parert
   @Input() no: any;
@@ -124,11 +124,14 @@ export class PolListComponent implements OnInit{
             QuantityOrder: new FormControl(null,[Validators.required]),
             BuyPrice: new FormControl(null,[Validators.required]),
             Memo: new FormControl(null),
-            Amount: new FormControl({value:null, disabled:true}),
           }));
     }
     else
       Swal.fire("Already add new po line!");
+  }
+  UpdateDate(val:any, e: any)
+  {
+    val.controls['OrderDate'].setValue(e.target.value);
   }
   onChangeQtyAndPrice(val: any,e: any, i: number)
   {
@@ -177,7 +180,7 @@ export class PolListComponent implements OnInit{
       for(let i = 0;i < this.polList.length; i++)
       { 
         this.total += this.polList[i].Amount;
-        this.polList[i].OrderDate = formatDate((this.polList[i].OrderDate), "MM-dd-yyyy HH:mm:ss",'en_US');
+        this.polList[i].OrderDate = formatDate((this.polList[i].OrderDate), "yyyy-MM-ddThh:mm",'en_US');
       }
       this.polListForm = new FormGroup({
         pol:new FormArray([]),

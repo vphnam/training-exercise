@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/app/environments/environment.prod';
-import { Part, Po, Pol, ResultViewModel } from 'src/app/services/interface.service';
+import { Part, Po, Pol, ResultViewModel, StockSite, Supplier } from 'src/app/services/interface.service';
+import { FormControl } from '@angular/forms';
+import { formatDate } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
@@ -61,6 +63,16 @@ export class SharedService {
     return this.http.get<Part[]>(this.APIUrl + '/Part/'+ val);
   }
 
+  //Supplier http methods
+  getSupplierList(): Observable<any[]>{
+    return this.http.get<Supplier[]>(this.APIUrl + '/Supplier');
+  }
+
+  //StockSite http methods
+  getStockSiteList(): Observable<any[]>{
+    return this.http.get<StockSite[]>(this.APIUrl + '/StockSite');
+  }
+
   //Purchase order and purchase order line http methods
   Savechanges2Table(val:any){
     return this.http.post<ResultViewModel>(this.APIUrl + '/PoAndPol',val);
@@ -69,5 +81,23 @@ export class SharedService {
   sendMail(val:any){
     return this.http.post<ResultViewModel>(this.APIUrl + '/Mail',val);
   }
-
+  orderDateValidator(d: FormControl){
+    try
+    {
+      var today = new Date();
+      const date = formatDate(today, "MM-dd-yyyy",'en_US');
+      const od = formatDate(d.value, "MM-dd-yyyy",'en_US');
+      if(date < od){
+        return {orderDateValidator: {invalid:true}};
+      }
+      else
+      {
+        return null;
+      }
+    }
+    catch
+    {
+      return {orderDateValidator: {invalid:true}};
+    }
+  }
 }

@@ -1,4 +1,4 @@
-<div class="container border">
+<div class="container">
     <div class="form-group row">
         <div class="col-md-12"><h3>SEARCH</h3></div>
         <div class="col-md-1"><label>Order No</label></div>
@@ -13,32 +13,35 @@
         <div class="col-md-3"><input type="date" class="form-control" [(ngModel)]="orderDateSearch"/></div>
         <div class="col-md-1"><label>Sent Mail?</label></div>
         <div class="col-md-3"><input type="checkbox" class="form-check-input" [(ngModel)]="sentMailSearch"/></div>
+        <div class="col-md-12"><button type="button" class="btn btn-primary float-end" (click)="refreshFilterBtnClick()">Refresh</button></div>
     </div>
 </div>
-<!--
-<div>
-    <button type="button" class="btn btn-primary float-right m-2" data-toggle="modal" 
-    (click)="openDialog()" data-backdrop="static" data-keyboard="false">Add purchase order</button>
+<hr>
+
+
+
+<ng-template #content let-modal data-target="#modal" >
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">ADD PURCHASE ORDER</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="mb-3">
+          <app-add-po (hidModal)="HiddenModal($event)"></app-add-po>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button #closeBtn type="button" data-miss="modal" aria-label="Close" class="btn btn-outline-dark" (click)="modal.close()">Close</button>
+    </div>
+  </ng-template>
+
+  <div>
+    <button type="button" class="btn btn-primary float-end" data-toggle="modal" 
+    (click)="openDialog(content)" data-backdrop="static" data-keyboard="false">Add purchase order</button>
 </div>
 
-<div class="modal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>Modal body text goes here.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
--->
 <div class="paged-table">
     <div>
         <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" (change)="onTableSizeChange($event)">
@@ -49,7 +52,7 @@
     </div>
     <table class="table table-striped">
         <thead>
-            <tr>
+            <tr class="font-weight">
                 <td>Order No</td>
                 <td>Supplier Name</td>
                 <td>Stock Site</td>
