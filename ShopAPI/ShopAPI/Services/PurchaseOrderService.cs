@@ -12,13 +12,23 @@ namespace ShopAPI.Services
     public class PurchaseOrderService : IPurchaseOrderService
     {
         private readonly IPurchaseOrderRepository _poRepo;
-        public PurchaseOrderService(IPurchaseOrderRepository poRepo)
+        private readonly ISupplierService _supService;
+        private readonly IStockSiteService _stService;
+        public PurchaseOrderService(IPurchaseOrderRepository poRepo, ISupplierService supService, IStockSiteService stService)
         {
             _poRepo = poRepo;
+            _supService = supService;
+            _stService = stService;
  
         }
         public async Task<IEnumerable<PurchaseOrder>> GetList()
         {
+            IEnumerable<PurchaseOrder> poList = await _poRepo.GetList();
+            foreach(PurchaseOrder item in poList)
+            {
+                item.SupplierNoNavigation = await _supService.GetByNo(item.SupplierNo);
+                item.StockSiteNavigation = await _stService.GetByNo(item.StockSite);
+            }
             return await _poRepo.GetList();
         }
         public async Task Create(PurchaseOrder po)

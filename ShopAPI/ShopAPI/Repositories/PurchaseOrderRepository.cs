@@ -21,14 +21,7 @@ namespace ShopAPI.Repositories
         }
         public async Task<IEnumerable<PurchaseOrder>> GetList()
         {
-            IEnumerable<PurchaseOrder> poList = await db.PurchaseOrders.OrderBy(n => n.OrderNo).ToListAsync();   
-            foreach(PurchaseOrder po in poList)
-            {
-                po.SupplierNoNavigation = await db.Suppliers.FindAsync(po.SupplierNo);
-                po.StockSiteNavigation = await db.StockSites.FindAsync(po.StockSite);
-                po.polList = await db.PurchaseOrderLines.Where(n => n.OrderNo == po.OrderNo).ToListAsync();
-            }
-            return poList;
+            return await db.PurchaseOrders.OrderBy(n => n.OrderNo).ToListAsync();
         }
         public async Task Create(PurchaseOrder po)
         {

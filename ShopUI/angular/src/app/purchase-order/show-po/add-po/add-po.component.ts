@@ -1,8 +1,7 @@
-import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Po, StockSite, Supplier } from 'src/app/services/interface.service';
 import { SharedService } from 'src/app/services/shared.service';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
@@ -51,7 +50,7 @@ export class AddPoComponent implements OnInit {
                           {
                               if(data.Status == 200)
                               {
-                                this.hidModal.emit('hidden');
+                                this.hidModal.emit();
                                 Swal.fire({icon: 'success', text: data.Message});
                                 this.router.navigateByUrl('/purchase-order/detail-po/' + data.Data.OrderNo);
                               }

@@ -9,5 +9,6 @@ namespace ShopAPI.IRepositories
     public interface IStockSiteRepository
     {
         Task<IEnumerable<StockSite>> GetList();
+        Task<StockSite> GetByNo(string no);
     }
 }

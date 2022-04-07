@@ -16,6 +16,12 @@ namespace ShopAPI.Services
             _supRepo = supRepo;
 
         }
+
+        public async Task<Supplier> GetByNo(int no)
+        {
+            return await _supRepo.GetByNo(no);
+        }
+
         public async Task<IEnumerable<Supplier>> GetList()
         {
             return await _supRepo.GetList();

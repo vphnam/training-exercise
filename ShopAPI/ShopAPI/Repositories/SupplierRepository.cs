@@ -16,6 +16,12 @@ namespace ShopAPI.Repositories
         {
             db = new ExerciseDbContext(configuration);
         }
+
+        public async Task<Supplier> GetByNo(int no)
+        {
+            return await db.Suppliers.FindAsync(no);
+        }
+
         public async Task<IEnumerable<Supplier>> GetList()
         {
             return await db.Suppliers.ToListAsync();

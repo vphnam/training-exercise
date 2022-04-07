@@ -153,20 +153,29 @@ export class PolListComponent implements OnInit{
                   denyButtonText: "No",}).then((result) => {
                       if(result.isConfirmed)
                       {
-                        this.service.deletePurchaseOrderLine(this.DeletePolModel).subscribe(data => 
-                          {
-                              if(data.Status == 200)
-                              {
-                                Swal.fire({icon: 'success', text: data.Message});
-                                this.refreshPurchaseOrderLineList(this.no);
-                                this.RefreshPartList(this.no);
-                              }
-                              else
-                              {
-                                console.warn(JSON.stringify(data));
-                                Swal.fire({icon: 'error',title: 'Ooops...', text: data.Message});
-                              }                     
-                          }); 
+
+                        if(this.polListForm.get('pol').length < 2)
+                        {
+                          Swal.fire({icon: 'error',title: 'Ooops...', text: 'Purchase order must have at least 1 line!'});
+                        }
+                        else
+                        {
+                          
+                          this.service.deletePurchaseOrderLine(this.DeletePolModel).subscribe(data => 
+                            {
+                                if(data.Status == 200)
+                                {
+                                  Swal.fire({icon: 'success', text: data.Message});
+                                  this.refreshPurchaseOrderLineList(this.no);
+                                  this.RefreshPartList(this.no);
+                                }
+                                else
+                                {
+                                  console.warn(JSON.stringify(data));
+                                  Swal.fire({icon: 'error',title: 'Ooops...', text: data.Message});
+                                }                     
+                            }); 
+                        }
                       }
                       else if(result.isDenied){
 

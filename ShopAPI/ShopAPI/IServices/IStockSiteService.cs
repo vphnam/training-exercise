@@ -9,5 +9,6 @@ namespace ShopAPI.IServices
     public interface IStockSiteService
     {
         Task<IEnumerable<StockSite>> GetList();
+        Task<StockSite> GetByNo(string no);
     }
 }

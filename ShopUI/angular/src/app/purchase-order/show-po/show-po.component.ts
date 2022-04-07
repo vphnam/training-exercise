@@ -1,10 +1,8 @@
-import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {SharedService } from 'src/app/services/shared.service';
 import { ActivatedRoute } from '@angular/router';
 import { Po } from 'src/app/services/interface.service';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import Swal from 'sweetalert2';
-import { AddPoComponent } from './add-po/add-po.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-show-po',
   templateUrl: './show-po.component.html',
@@ -41,9 +39,8 @@ export class ShowPoComponent implements OnInit {
   ngOnInit(): void {
     this.refreshPurchaseOrderList();
   }
-  HiddenModal(e:any)
+  HiddenModal()
   {
-     console.warn("co vo day ko troi");
      this.modalService.dismissAll();
   }
   refreshFilterBtnClick()
