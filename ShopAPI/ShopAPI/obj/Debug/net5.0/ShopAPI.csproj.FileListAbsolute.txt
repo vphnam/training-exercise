@@ -213,3 +213,4 @@ D:\dotnet\TrainingExercise\training-exercise\ShopAPI\ShopAPI\obj\Debug\net5.0\Sh
 D:\dotnet\TrainingExercise\training-exercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ref\ShopAPI.dll
 D:\dotnet\TrainingExercise\training-exercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.pdb
 D:\dotnet\TrainingExercise\training-exercise\ShopAPI\ShopAPI\obj\Debug\net5.0\ShopAPI.genruntimeconfig.cache
+D:\dotnet\TrainingExercise\training-exercise\ShopAPI\ShopAPI\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

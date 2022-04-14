@@ -1,24 +1,21 @@
 <div class="container">
-    <div class="form-group row">
-        <div class="col-md-12"><h3>SEARCH</h3></div>
-        <div class="col-md-1"><label>Order No</label></div>
-        <div class="col-md-3"><input type="text" class="form-control" [(ngModel)]="orderNoSearch"/></div>
-        <div class="col-md-1"><label>Supplier Name</label></div>
-        <div class="col-md-3"><input type="text" class="form-control" [(ngModel)] = "supplierNameSearch" /></div>
-        <div class="col-md-1"><label>Stock Site</label></div>
-        <div class="col-md-3"><input type="text" class="form-control" [(ngModel)] = "stockSiteSearch" /></div>
-        <div class="col-md-1"><label>Stock Name</label></div>
-        <div class="col-md-3"><input type="text" class="form-control" [(ngModel)]="stockNameSearch" /></div>
-        <div class="col-md-1"><label>Order Date</label></div>
-        <div class="col-md-3"><input type="date" class="form-control" [(ngModel)]="orderDateSearch"/></div>
-        <div class="col-md-1"><label>Sent Mail?</label></div>
-        <div class="col-md-3"><input type="checkbox" class="form-check-input" [(ngModel)]="sentMailSearch"/></div>
-        <div class="col-md-12"><button type="button" class="btn btn-primary float-end" (click)="refreshFilterBtnClick()">Refresh</button></div>
-    </div>
+    <form [formGroup]="searchForm" class="form-group row">
+    <div class="col-md-12"><h3>SEARCH</h3></div>
+    <div class="col-md-1"><label>Order No</label></div>
+    <div class="col-md-3"><input type="text" class="form-control" formControlName="orderNoSearch" /></div>
+    <div class="col-md-1"><label>Supplier Name</label></div>
+    <div class="col-md-3"><input type="text" class="form-control" formControlName="supplierNameSearch"/></div>
+    <div class="col-md-1"><label>Stock Site</label></div>
+    <div class="col-md-3"><input type="text" class="form-control" formControlName="stockSiteSearch" /></div>
+    <div class="col-md-1"><label>Stock Name</label></div>
+    <div class="col-md-3"><input type="text" class="form-control" formControlName="stockNameSearch" /></div>
+    <div class="col-md-1"><label>Order Date</label></div>
+    <div class="col-md-3"><input type="date" class="form-control" formControlName="orderDateSearch"/></div>
+    <div class="col-md-1"><label>Sent Mail?</label></div>
+    <div class="col-md-3"><input type="checkbox" class="form-check-input" formControlName="sentMailSearch"/></div>
+    <div class="col-md-12"><button type="button" class="btn btn-primary float-end" (click)="refreshFilterBtnClick()">Refresh</button></div>
+</form> 
 </div>
-<hr>
-
-
 
 <ng-template #content let-modal data-target="#modal" >
     <div class="modal-header">
@@ -32,52 +29,60 @@
         </div>
       </form>
     </div>
-    <div class="modal-footer">
-      <button #closeBtn type="button" data-miss="modal" aria-label="Close" class="btn btn-outline-dark" (click)="modal.close()">Close</button>
-    </div>
-  </ng-template>
 
-  <div>
+    <div class="modal-footer">
+        <button #closeBtn type="button" data-miss="modal" aria-label="Close" class="btn btn-outline-dark" (click)="modal.close()">Close</button>
+    </div>
+</ng-template>
+
+<div>
     <button type="button" class="btn btn-primary float-end" data-toggle="modal" 
     (click)="openDialog(content)" data-backdrop="static" data-keyboard="false">Add purchase order</button>
 </div>
 
-<div class="paged-table">
-    <div>
-        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" (change)="onTableSizeChange($event)">
-            <option *ngFor="let size of this.tableSizes">
-                {{size}}
-            </option>
-        </select>
-    </div>
-    <table class="table table-striped">
-        <thead>
-            <tr class="font-weight">
-                <td>Order No</td>
-                <td>Supplier Name</td>
-                <td>Stock Site</td>
-                <td>Stock Name</td>
-                <td>Order Date</td> 
-                <td>Sent Mail</td>
-            </tr>
-        </thead>
-        <tbody >
-            <tr *ngFor="let x of this.poList | searchfilter: orderNoSearch: supplierNameSearch: stockSiteSearch: stockNameSearch: orderDateSearch: sentMailSearch | paginate:{
-                itemsPerPage: tableSize,
-                currentPage: page,
-                totalItems: count}; let i = index">
-                <td ><a routerLink="/purchase-order/detail-po/{{x.OrderNo}}">{{x.OrderNo}}</a></td>
-                <td>{{x.SupplierNoNavigation.SupplierName}}</td>
-                <td>{{x.StockSiteNavigation.StockSite1}}</td>
-                <td>{{x.StockName}}</td>
-                <td>{{x.OrderDate | date:'MM/dd/yyyy'}}</td>
-                <td><input type="checkbox" [checked]="this.x.SentMail" disabled/></td>
-            </tr>
-        </tbody>
-    </table>
-    <div>
-        <pagination-controls previousLabel="Pre" nextLabel="Next" (pageChange)="onTableDataChange($event)">
 
-        </pagination-controls>
+<div *ngIf="loaderService.isLoading | async" class="wrapper">
+    <div><mat-spinner style="left:50%;right:50%;" color="cold"></mat-spinner></div>
+</div>
+<div *ngIf="loaderService.loaded | async">
+    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" (change)="onTableSizeChange($event)">
+        <option *ngFor="let size of this.tableSizes">
+            {{size}}
+        </option>
+    </select>
+</div>
+<div *ngIf="loaderService.loaded | async">
+    <div class="paged-table">
+        <table class="table table-striped">
+            <thead>
+                <tr class="font-weight">
+                    <td>Order No</td>
+                    <td>Supplier Name</td>
+                    <td>Stock Site</td>
+                    <td>Stock Name</td>
+                    <td>Order Date</td> 
+                    <td>Sent Mail</td>
+                </tr>
+            </thead>
+            <tbody >
+                <tr *ngFor="let x of this.poList | searchfilter: orderNoSearch: supplierNameSearch: stockSiteSearch: stockNameSearch: orderDateSearch: sentMailSearch
+                | paginate:{
+                    itemsPerPage: tableSize,
+                    currentPage: page,
+                    totalItems: count}; let i = index">
+                    <td ><a routerLink="/purchase-order/detail-po/{{x.orderNo}}">{{x.orderNo}}</a></td>
+                    <td>{{x.supplierNoNavigation.supplierName}}</td>
+                    <td>{{x.stockSiteNavigation.stockSite1}}</td>
+                    <td>{{x.stockName}}</td>
+                    <td>{{x.orderDate | date:'MM/dd/yyyy'}}</td>
+                    <td><input type="checkbox" [checked]="this.x.sentMail" disabled/></td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <pagination-controls previousLabel="Pre" nextLabel="Next" (pageChange)="onTableDataChange($event)">
+    
+            </pagination-controls>
+        </div>
     </div>
 </div>

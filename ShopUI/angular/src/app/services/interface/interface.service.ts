@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class InterfaceService {
-
   constructor() { }
 }
 export interface Pol{
@@ -19,26 +18,26 @@ export interface Pol{
   Amount: Number
 }
 export interface Supplier{
-  SupplierNo: number,
-  SupplierName: string,
-  Email: string
+  supplierNo: number,
+  supplierName: string,
+  email: string
 }
 export interface StockSite{
-  StockSite1: string,
-  Email: string
+  stockSite1: string,
+  email: string
 }
 export interface Po{
-  OrderNo: number;
-  SupplierNoNavigation: Supplier,
-  StockSiteNavigation:StockSite,
-  StockName: string,
-  OrderDate: Date,
-  Note: string,
-  Address: string,
-  County: string,
-  PostCode: string,
-  SentMail: boolean,
-  Status: boolean,
+  orderNo: number;
+  supplierNoNavigation: Supplier,
+  stockSiteNavigation:StockSite,
+  stockName: string,
+  orderDate: Date,
+  note: string,
+  address: string,
+  county: string,
+  postCode: string,
+  sentMail: boolean,
+  status: boolean,
   polList: Pol[]
 }
 export interface Part{
@@ -49,4 +48,13 @@ export interface ResultViewModel{
   Status: number;
   Message: string;
   Data: any
+}
+export interface Credential{
+  UserName: string;
+  PassWord: string;
+}
+export interface ErrorPageModel{
+  header: string;
+  errorStatus:number;
+  message: string;
 }

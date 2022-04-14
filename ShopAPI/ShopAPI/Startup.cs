@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,12 +7,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using ShopAPI.IRepositories;
 using ShopAPI.IServices;
 using ShopAPI.Repositories;
 using ShopAPI.Services;
+using System.Text;
 
 namespace ShopAPI
 {
@@ -27,14 +30,36 @@ namespace ShopAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //enable cors
-            services.AddCors(c =>
+            /*services.AddAuthentication("CookieAuthentication").AddCookie("CookieAuthentication", options => {
+                options.Cookie.Name = "CookieAuthentication";
+            });*/
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
-                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod());
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                };
+            });
+            
+            services.AddCors(builder =>
+            {
+                builder.AddPolicy("LocalDevCors", options =>
+                {
+                    options.WithOrigins("http://http://localhost:4200")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+                });
             });
             //json serializer
-            services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
-                .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+            /*services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+                .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());*/
             services.AddControllers();
             services.AddScoped<ISendMailService, SendMailService>();
             services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
@@ -48,6 +73,11 @@ namespace ShopAPI
             services.AddScoped<ISupplierRepository, SupplierRepository>();
             services.AddScoped<IStockSiteService, StockSiteService>();
             services.AddScoped<IStockSiteRepository, StockSiteRepository>();
+            services.AddScoped<IUserAccountRepository, UserAccountRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<ILoggerService, LoggerService>();
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ShopAPI", Version = "v1" });
@@ -68,6 +98,8 @@ namespace ShopAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

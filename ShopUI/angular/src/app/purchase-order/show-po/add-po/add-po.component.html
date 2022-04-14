@@ -4,8 +4,8 @@
         <div class="col-md-4">
             <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" formControlName="SupplierNo" >
                 <option value="" selected></option>
-                <option *ngFor="let sup of suppliers" value={{sup.SupplierNo}}>
-                    {{sup.SupplierName}}
+                <option *ngFor="let sup of suppliers" value={{sup.supplierNo}}>
+                    {{sup.supplierName}}
                 </option>
             </select>
         </div>
@@ -13,8 +13,8 @@
         <div class="col-md-4">
             <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" formControlName="StockSite" >
                 <option value="" selected></option>
-                <option *ngFor="let st of stockSites" value={{st.StockSite1}}>
-                    {{st.StockSite1}}
+                <option *ngFor="let st of stockSites" value={{st.stockSite1}}>
+                    {{st.stockSite1}}
                 </option>
             </select>
         </div>

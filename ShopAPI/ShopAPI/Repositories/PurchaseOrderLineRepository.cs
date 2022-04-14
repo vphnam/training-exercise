@@ -27,8 +27,12 @@ namespace ShopAPI.Repositories
         public async Task Delete(DeletePolModel delPol)
         {
             PurchaseOrderLine pol = await db.PurchaseOrderLines.FindAsync(delPol.partNo,delPol.orderNo);
-            db.PurchaseOrderLines.Remove(pol);
-            await db.SaveChangesAsync();
+            int count = await db.PurchaseOrderLines.Where(n => n.OrderNo == pol.OrderNo).CountAsync();
+            if(count > 1)
+            {
+                db.PurchaseOrderLines.Remove(pol);
+                await db.SaveChangesAsync();
+            }
         } 
 
         public async Task<IEnumerable<PurchaseOrderLine>> GetList()

@@ -30,3 +30,15 @@
 .col-md-12{
     margin-bottom: 10px;
 }
+.wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+    width: 100%;
+    background: black;
+    opacity: 0.3;
+}
+.inner{
+    padding: 12px;
+}

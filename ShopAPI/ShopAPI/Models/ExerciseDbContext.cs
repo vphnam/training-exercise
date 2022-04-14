@@ -24,8 +24,10 @@ namespace ShopAPI.Models
         public virtual DbSet<Part> Parts { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public virtual DbSet<PurchaseOrderLine> PurchaseOrderLines { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<StockSite> StockSites { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
+        public virtual DbSet<UserAccount> UserAccounts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -102,6 +104,16 @@ namespace ShopAPI.Models
                     .HasConstraintName("fk_pol_part");
             });
 
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.HasKey(e => e.RoleNo)
+                    .HasName("pk_role");
+
+                entity.ToTable("Role");
+
+                entity.Property(e => e.RoleName).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<StockSite>(entity =>
             {
                 entity.HasKey(e => e.StockSite1);
@@ -125,6 +137,23 @@ namespace ShopAPI.Models
                 entity.Property(e => e.Email).HasMaxLength(200);
 
                 entity.Property(e => e.SupplierName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<UserAccount>(entity =>
+            {
+                entity.HasKey(e => e.UserNo)
+                    .HasName("pk_user");
+
+                entity.ToTable("UserAccount");
+
+                entity.Property(e => e.PassWord).HasMaxLength(200);
+
+                entity.Property(e => e.UserName).HasMaxLength(50);
+
+                entity.HasOne(d => d.RoleNoNavigation)
+                    .WithMany(p => p.UserAccounts)
+                    .HasForeignKey(d => d.RoleNo)
+                    .HasConstraintName("fk_role_user");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, ViewChild, ElementRef, ViewChildren, QueryList} from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChildren, QueryList} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/services/shared.service';
 import Swal from 'sweetalert2';

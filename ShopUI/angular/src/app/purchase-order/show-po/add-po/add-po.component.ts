@@ -1,9 +1,10 @@
 import { Component, OnInit, Output, EventEmitter} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Po, StockSite, Supplier } from 'src/app/services/interface.service';
+import { Po, StockSite, Supplier } from 'src/app/services/interface/interface.service';
 import { SharedService } from 'src/app/services/shared.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { ValidatorService } from 'src/app/services/custom-validator/validator.service';
 
 @Component({
   selector: 'app-add-po',
@@ -12,13 +13,13 @@ import { Router } from '@angular/router';
 })
 export class AddPoComponent implements OnInit {
 
-  constructor(private service: SharedService, private router: Router) { }
+  constructor(private service: SharedService, private router: Router, private validate: ValidatorService) { }
 
   poAddForm = new FormGroup({
     SupplierNo: new FormControl(null, [Validators.required]),
     StockSite: new FormControl(null, [Validators.required]),
     StockName: new FormControl(null, [Validators.required]),
-    OrderDate: new FormControl(null, [Validators.required, this.service.orderDateValidator]),
+    OrderDate: new FormControl(null, [Validators.required, this.validate.orderDateValidator]),
     Address: new FormControl(null, [Validators.required]),
     Note: new FormControl(null,),
     County: new FormControl(null, [Validators.required]),

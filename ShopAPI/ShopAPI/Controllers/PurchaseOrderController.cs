@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using ShopAPI.Models;
 using System.Threading.Tasks;
 using System;
 using ShopAPI.IServices;
 using ShopAPI.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShopAPI.Controllers
 {
@@ -18,16 +18,19 @@ namespace ShopAPI.Controllers
             _poService = poService;
         }
         [HttpGet]
+        [Authorize (Roles = "NormalUser, SuperUser")]
         public async Task<object> Get()
         {
              return await _poService.GetList();
         }
         [HttpGet("{no}")]
+        [Authorize(Roles = "NormalUser, SuperUser")]
         public async Task<object> Get(int no)
         {
             return await _poService.GetRecord(no);
         }
         [HttpPost]
+        [Authorize(Roles = "NormalUser, SuperUser")]
         public async Task<object> Post(PurchaseOrder po)
         {
             try
@@ -42,6 +45,7 @@ namespace ShopAPI.Controllers
             }
         }
         [HttpPut]
+        [Authorize(Roles = "NormalUser, SuperUser")]
         public async Task<object> Put(PurchaseOrder po)
         {
             try
@@ -55,6 +59,7 @@ namespace ShopAPI.Controllers
             }
         }
         [HttpDelete("{no}")]
+        [Authorize(Roles = "NormalUser, SuperUser")]
         public async Task<object> Delete(int no)
         {
             try

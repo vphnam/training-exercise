@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, AfterViewInit } from '@angular/core';
 import {FormBuilder, FormGroup, FormControl, Validators, FormArray} from '@angular/forms';
 import { SharedService } from 'src/app/services/shared.service';
 import { formatDate } from '@angular/common';
+import { ValidatorService } from 'src/app/services/custom-validator/validator.service';
 import Swal from 'sweetalert2';
 @Component({
   selector: 'app-pol-list',
@@ -30,7 +31,7 @@ export class PolListComponent implements OnInit{
   //
   pol:any;
   //
-  constructor(private service: SharedService, private formBuilder: FormBuilder) {}
+  constructor(private service: SharedService, private formBuilder: FormBuilder, private validator: ValidatorService) {}
 
   ngOnInit(): void {
     this.refreshPurchaseOrderLineList(this.no);
@@ -42,25 +43,6 @@ export class PolListComponent implements OnInit{
     {
       this.parts = data;
     });
-  }
-  orderDateValidator(d: FormControl){
-    try
-    {
-      var today = new Date();
-      const date = formatDate(today, "MM-dd-yyyy HH:mm:ss",'en_US');
-      const od = formatDate(d.value, "MM-dd-yyyy HH:mm:ss",'en_US');
-      if(date < od){
-        return {orderDateValidator: {invalid:true}};
-      }
-      else
-      {
-        return null;
-      }
-    }
-    catch
-    {
-      return {orderDateValidator: {invalid:true}};
-    }
   }
   disableForm()
   {
@@ -120,7 +102,7 @@ export class PolListComponent implements OnInit{
             OrderNo: new FormControl(null),
             PartDescription: new FormControl(null),
             Manufacturer: new FormControl(null),
-            OrderDate: new FormControl(null,[Validators.required,this.orderDateValidator]),
+            OrderDate: new FormControl(null,[Validators.required,this.validator.orderDateValidator]),
             QuantityOrder: new FormControl(null,[Validators.required]),
             BuyPrice: new FormControl(null,[Validators.required]),
             Memo: new FormControl(null),
@@ -202,7 +184,7 @@ export class PolListComponent implements OnInit{
           OrderNo: new FormControl(this.polList[x].OrderNo,),
           PartDescription: new FormControl(this.polList[x].PartDescription,),
           Manufacturer: new FormControl(this.polList[x].Manufacturer,),
-          OrderDate: new FormControl(this.polList[x].OrderDate,[Validators.required,this.orderDateValidator]),
+          OrderDate: new FormControl(this.polList[x].OrderDate,[Validators.required,this.validator.orderDateValidator]),
           QuantityOrder: new FormControl(this.polList[x].QuantityOrder,[Validators.required]),
           BuyPrice: new FormControl(this.polList[x].BuyPrice,[Validators.required]),
           Memo: new FormControl(this.polList[x].Memo,),  

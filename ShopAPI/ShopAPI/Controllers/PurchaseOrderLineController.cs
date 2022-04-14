@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ShopAPI.IServices;
 using ShopAPI.Models;
 using ShopAPI.ViewModels;
@@ -18,16 +19,19 @@ namespace ShopAPI.Controllers
             _polService = polService;
         }
         [HttpGet]
+        [Authorize(Roles = "NormalUser, SuperUser")]
         public async Task<object> Get()
         {
             return await _polService.GetList();
         }
         [HttpGet("purchaseorder/{no}")]
+        [Authorize(Roles = "NormalUser, SuperUser")]
         public async Task<object> GetByOrderNo(int no)
         {
             return await _polService.GetAllRecordsOfPurchaseOrderByOrderNo(no);
         }
         [HttpPost]
+        [Authorize(Roles = "NormalUser, SuperUser")]
         public async Task<object> Post(PurchaseOrderLine pol)
         {
             try
@@ -41,6 +45,7 @@ namespace ShopAPI.Controllers
             }
         }
         [HttpPut]
+        [Authorize(Roles = "NormalUser, SuperUser")]
         public async Task<object> Put(PurchaseOrderLine pol)
         {
             try
@@ -54,6 +59,7 @@ namespace ShopAPI.Controllers
             }
         }
         [HttpPut("update-list")]
+        [Authorize(Roles = "NormalUser, SuperUser")]
         public async Task<object> Put(List<PurchaseOrderLine> polList)
         {
             try
@@ -67,6 +73,7 @@ namespace ShopAPI.Controllers
             }
         }
         [HttpPost("del/")]
+        [Authorize(Roles = "NormalUser, SuperUser")]
         public async Task<object> Delete(DeletePolModel delPol)
         {
             try
