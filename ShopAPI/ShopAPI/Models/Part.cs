@@ -15,6 +15,6 @@ namespace ShopAPI.Models
         public int PartNo { get; set; }
         public string PartName { get; set; }
 
-        public virtual ICollection<PurchaseOrderLine> PurchaseOrderLines { get; set; }
+        public virtual ICollection<PurchaseOrderLine> PurchaseOrderLines { get { return null; } set {; } }
     }
 }

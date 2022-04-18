@@ -12,9 +12,10 @@ namespace ShopAPI.Models
         public string PartDescription { get; set; }
         public string Manufacturer { get; set; }
         public DateTime? OrderDate { get; set; }
-        public int? QuantityOrder { get; set; }
-        public decimal? BuyPrice { get; set; }
+        public int QuantityOrder { get; set; }
+        public decimal BuyPrice { get; set; }
         public string Memo { get; set; }
+        public decimal Amount { get { return this.BuyPrice * this.QuantityOrder; } }
 
         public virtual Part PartNoNavigation { get; set; }
     }

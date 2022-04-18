@@ -1,0 +1,33 @@
+.container{
+    border-style: solid;
+    border-width: 1px;
+    margin-bottom: 10px;
+}
+
+.col-md-1{
+    margin-top: 20px;
+}
+.col-md-3{
+    margin-top: 20px;
+}
+.form-check-input{
+    width: 20px;
+    height: 20px;
+}
+.paged-table{
+    margin-top: 20px;
+}
+.table-striped{
+    border: black solid;
+    margin-top: 5px;
+}
+.font-weight{
+    font-weight: bold;
+}
+.form-select{
+    width: 100px;
+    font-size: medium;
+}
+.col-md-12{
+    margin-bottom: 10px;
+}

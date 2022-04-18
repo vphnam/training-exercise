@@ -4,15 +4,20 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 import { Router } from '@angular/router';
-import { ErrorPageModel } from '../services/interface/interface.service';
+import { LoaderService } from '../services/loader/loader.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private authenticationService: AuthenticationService, private router:Router) { }
+    constructor(private authenticationService: AuthenticationService, 
+        private router:Router,
+        private loader: LoaderService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
-            this.authenticationService.nextErrorCode("ERROR " + err.status);
+            this.authenticationService.nextErrorCode(err.status);
+            //
+            this.loader.isLoading.next(false);
+
             localStorage.setItem('errorStatus', err.status);
             this.router.navigate(['/error']);
             /*if (err.status === 401 || err.status === 403) {

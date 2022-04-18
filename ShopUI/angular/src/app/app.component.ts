@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Role } from './models/role';
 import { User } from './models/user';
 import { AuthenticationService } from './services/authentication/authentication.service';
+import { LoaderService } from './services/loader/loader.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,7 +16,8 @@ export class AppComponent {
     title = 'angular';
     constructor(
         private router: Router,
-        public authenticationService: AuthenticationService
+        public authenticationService: AuthenticationService,
+        public loader: LoaderService
     ) 
     {
         this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
@@ -32,8 +34,6 @@ export class AppComponent {
 
     logout() {
         this.authenticationService.logout();
-        this.authenticationService.loggedIn.next(false);
-        this.authenticationService.loggedOut.next(true);
         this.router.navigate(['/user/login']);
     }
 }

@@ -10,5 +10,6 @@ namespace ShopAPI.IServices
     {
         Task<IEnumerable<Supplier>> GetList();
         Task<Supplier> GetByNo(int no);
+        Task Create(Supplier sp);
     }
 }

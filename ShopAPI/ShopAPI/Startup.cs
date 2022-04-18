@@ -1,19 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Serialization;
-using ShopAPI.IRepositories;
-using ShopAPI.IServices;
-using ShopAPI.Repositories;
-using ShopAPI.Services;
 using System.Text;
 
 namespace ShopAPI
@@ -51,7 +43,7 @@ namespace ShopAPI
             {
                 builder.AddPolicy("LocalDevCors", options =>
                 {
-                    options.WithOrigins("http://http://localhost:4200")
+                    options.WithOrigins(Configuration["SAPHost:url"])
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
@@ -61,7 +53,8 @@ namespace ShopAPI
             /*services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());*/
             services.AddControllers();
-            services.AddScoped<ISendMailService, SendMailService>();
+            services.AddAppServices();
+            /*services.AddScoped<ISendMailService, SendMailService>();
             services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
             services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
             services.AddScoped<IPurchaseOrderLineService, PurchaseOrderLineService>();
@@ -75,8 +68,7 @@ namespace ShopAPI
             services.AddScoped<IStockSiteRepository, StockSiteRepository>();
             services.AddScoped<IUserAccountRepository, UserAccountRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
-            services.AddScoped<ILoggerService, LoggerService>();
-
+            services.AddScoped<ILoggerService, LoggerService>();*/
 
             services.AddSwaggerGen(c =>
             {

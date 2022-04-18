@@ -1,7 +1,5 @@
-import { NullVisitor } from '@angular/compiler/src/render3/r3_ast';
 import { Pipe, PipeTransform } from '@angular/core';
-import { PolListComponent } from '../purchase-order/detail-po/pol-list/pol-list.component';
-import { Po } from '../services/interface/interface.service';
+import { IPo } from '../services/interface/interface.service';
 
 @Pipe({
   name: 'searchfilter'
@@ -9,7 +7,7 @@ import { Po } from '../services/interface/interface.service';
 export class SearchfilterPipe implements PipeTransform {
 
   transform(PoList: any[], orderNoSearch: string, supplierNameSearch: string, stockSiteSearch: string, 
-    stockNameSearch: string, orderDateSearch: Date, sentMailSearch: boolean): Po[] {
+    stockNameSearch: string, orderDateSearch: Date, sentMailSearch: boolean): IPo[] {
     if(!PoList || (!orderNoSearch && !supplierNameSearch && !stockSiteSearch && !stockNameSearch && !orderDateSearch && !sentMailSearch))
     {
       return PoList;

@@ -26,5 +26,10 @@ namespace ShopAPI.Repositories
         {
             return await db.Suppliers.ToListAsync();
         }
+        public async Task Create(Supplier sp)
+        {
+            db.Suppliers.Add(sp);
+            await db.SaveChangesAsync();
+        }
     }
 }

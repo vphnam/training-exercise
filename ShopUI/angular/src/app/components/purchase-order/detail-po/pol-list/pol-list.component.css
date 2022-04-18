@@ -1,0 +1,32 @@
+#partNo{
+    width: 200px;
+}
+.add-new-line-container{
+    text-align: right;
+}
+.disabled{
+    pointer-events: none;
+    cursor: not-allowed;
+}
+#orderDate{
+    width: 200px;
+}
+.form-select{
+    font-size: medium;
+}
+select{
+    max-height: 300px;
+    overflow-y: auto;
+}
+option{
+    max-height: 300px;
+    overflow-y: auto;
+}
+button.btn-like-a-tag{
+    background: transparent;
+    color:blue;
+    border:none;
+    outline: 0;
+    text-decoration: underline;
+}
+

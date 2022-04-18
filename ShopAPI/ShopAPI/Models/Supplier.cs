@@ -16,6 +16,6 @@ namespace ShopAPI.Models
         public string SupplierName { get; set; }
         public string Email { get; set; }
 
-        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
+        public virtual ICollection<PurchaseOrder> PurchaseOrders { get { return null; } set {; } }
     }
 }

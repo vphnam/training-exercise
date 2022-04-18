@@ -6,30 +6,30 @@ import { Injectable } from '@angular/core';
 export class InterfaceService {
   constructor() { }
 }
-export interface Pol{
-  PartNo: number,
-  OrderNo: number,
-  PartDescription: string,
-  Manufacturer: string,
-  QuantityOrder: number,
-  BuyPrice:number,
-  OrderDate: string,
-  MeMo: string,
-  Amount: Number
+export interface IPol{
+  partNo: number,
+  orderNo: number,
+  partDescription: string,
+  manufacturer: string,
+  quantityOrder: number,
+  buyPrice:number,
+  orderDate: string,
+  meMo: string,
+  amount: Number
 }
-export interface Supplier{
+export interface ISupplier{
   supplierNo: number,
   supplierName: string,
   email: string
 }
-export interface StockSite{
+export interface IStockSite{
   stockSite1: string,
   email: string
 }
-export interface Po{
+export interface IPo{
   orderNo: number;
-  supplierNoNavigation: Supplier,
-  stockSiteNavigation:StockSite,
+  supplierNoNavigation: ISupplier,
+  stockSiteNavigation:IStockSite,
   stockName: string,
   orderDate: Date,
   note: string,
@@ -38,22 +38,22 @@ export interface Po{
   postCode: string,
   sentMail: boolean,
   status: boolean,
-  polList: Pol[]
+  polList: IPol[]
 }
-export interface Part{
-  PartNo: string,
-  PartName: string
+export interface IPart{
+  partNo: string,
+  partName: string
 }
-export interface ResultViewModel{
-  Status: number;
-  Message: string;
-  Data: any
+export interface IResultViewModel{
+  status: number;
+  message: string;
+  data: any
 }
-export interface Credential{
+export interface ICredential{
   UserName: string;
   PassWord: string;
 }
-export interface ErrorPageModel{
+export interface IErrorPageModel{
   header: string;
   errorStatus:number;
   message: string;

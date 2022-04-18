@@ -12,33 +12,27 @@ export class InterceptorService implements HttpInterceptor{
   constructor(public loaderService: LoaderService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.loaderService.isLoading.next(true);
-    this.loaderService.loaded.next(false);
     return next.handle(req).pipe(
-      tap(evt => {
+      /*tap(evt => {
         if(evt instanceof HttpResponse){
+          console.warn("done but?");
           this.loaderService.isLoading.next(false);
-          this.loaderService.loaded.next(true);
         }
+      })*/
+      finalize(() =>{
+        this.loaderService.isLoading.next(false);
       }),
-      catchError(err => {
-        if(err instanceof HttpResponse){
-            this.loaderService.isLoading.next(true);
-            this.loaderService.loaded.next(false);
-        }
-        return EMPTY;
-      })
     );
+    
   }
-  /*
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.loaderService.isLoading.next(true);
-    this.loaderService.loaded.next(false);
+}
+  
+  /*intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       finalize(() =>{
           this.loaderService.isLoading.next(false);
-          this.loaderService.loaded.next(true);
         }),
     );
   }
-  */
-}
+  
+}*/

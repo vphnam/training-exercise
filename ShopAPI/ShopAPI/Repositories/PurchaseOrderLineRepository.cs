@@ -47,7 +47,7 @@ namespace ShopAPI.Repositories
         }
         public async Task<IEnumerable<PurchaseOrderLine>> GetAllRecordsOfPurchaseOrderByOrderNo(int no)
         {
-            return await db.PurchaseOrderLines.Where(n => n.OrderNo == no).ToListAsync();
+            return await db.PurchaseOrderLines.Where(n => n.OrderNo == no).OrderBy(n => n.PartNo).ToListAsync();
         }
 
         public async Task Update(PurchaseOrderLine pol)

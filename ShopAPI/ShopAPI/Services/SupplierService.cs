@@ -26,5 +26,9 @@ namespace ShopAPI.Services
         {
             return await _supRepo.GetList();
         }
+        public async Task Create(Supplier sp)
+        {
+            await _supRepo.Create(sp);
+        }
     }
 }

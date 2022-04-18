@@ -5,7 +5,8 @@ using System;
 using ShopAPI.IServices;
 using ShopAPI.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-
+using System.Threading;
+    
 namespace ShopAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -13,6 +14,7 @@ namespace ShopAPI.Controllers
     public class PurchaseOrderController : ControllerBase
     {
         private readonly IPurchaseOrderService _poService;
+        
         public PurchaseOrderController(IPurchaseOrderService poService)
         {
             _poService = poService;
@@ -41,7 +43,7 @@ namespace ShopAPI.Controllers
             }
             catch(Exception ex)
             {
-                return new ResultViewModel(ViewModels.StatusCode.Error, "Something went wrong", ex);
+                return new ResultViewModel(ViewModels.StatusCode.Error, "Something went wrong", ex.Message);
             }
         }
         [HttpPut]
@@ -55,7 +57,7 @@ namespace ShopAPI.Controllers
             }
             catch (Exception ex)
             {
-                return new ResultViewModel(ViewModels.StatusCode.Error, "Something went wrong", ex);
+                return new ResultViewModel(ViewModels.StatusCode.Error, "Something went wrong", ex.Message);
             }
         }
         [HttpDelete("{no}")]
@@ -69,7 +71,7 @@ namespace ShopAPI.Controllers
             }
             catch (Exception ex)
             {
-                return new ResultViewModel(ViewModels.StatusCode.Error, "Something went wrong", ex);
+                return new ResultViewModel(ViewModels.StatusCode.Error, "Something went wrong", ex.Message);
             }
         }
 

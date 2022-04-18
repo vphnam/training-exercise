@@ -40,7 +40,7 @@ namespace ShopAPI.Controllers
                     new Claim(ClaimTypes.Role, user.RoleNoNavigation.RoleName)
                 };
 
-                var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Audience"], claims, expires: DateTime.Now.AddMinutes(15), signingCredentials: crendentials);
+                var token = new JwtSecurityToken(_config["Jwt:Issuer"], _config["Jwt:Audience"], claims, expires: DateTime.Now.AddMinutes(20), signingCredentials: crendentials);
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
                 //var identity = new ClaimsIdentityg(claims, "CookieAuthentication");
                 //ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);

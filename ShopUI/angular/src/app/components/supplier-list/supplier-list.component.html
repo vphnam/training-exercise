@@ -1,0 +1,37 @@
+<div>
+    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+        (change)="onTableSizeChange($event)">
+        <option *ngFor="let size of this.tableSizes">
+            {{size}}
+        </option>
+    </select>
+</div>
+<div>
+    <div class="paged-table">
+        <table class="table table-striped">
+            <thead>
+                <tr class="font-weight">
+                    <td>Supplier No</td>
+                    <td>Supplier Name</td>
+                    <td>Email</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let x of this.supList | searchByNoFilter: this.supplierNoSearch.value
+                | paginate:{
+                    itemsPerPage: tableSize,
+                    currentPage: page,
+                    totalItems: count}; let i = index">
+                    <td>{{x.supplierNo}}</td>
+                    <td>{{x.supplierName}}</td>
+                    <td>{{x.email}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <pagination-controls previousLabel="Pre" nextLabel="Next" (pageChange)="onTableDataChange($event)">
+
+            </pagination-controls>
+        </div>
+    </div>
+</div>
