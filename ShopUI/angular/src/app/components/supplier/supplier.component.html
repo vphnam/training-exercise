@@ -1,0 +1,29 @@
+<div id="accordionExample">
+    <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button rounded bg-primary" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Create supplier
+        </button>
+    </h2>
+    <div class="accordion-item" id="collapseOne">
+        <div class="accordion-collapse collapse show" aria-labelledby="headingOne">
+            <div class="accordion-body">
+                <app-supplier-create></app-supplier-create>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="accordion-header" id="headingTwo">
+        <button class="accordion-button rounded collapsed bg-primary" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Supplier List
+        </button>
+    </h2>
+    <div class="accordion-item" id="collapseTwo">
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+            <div class="accordion-body">
+                <app-supplier-list></app-supplier-list>
+            </div>
+        </div>
+    </div>
+</div>

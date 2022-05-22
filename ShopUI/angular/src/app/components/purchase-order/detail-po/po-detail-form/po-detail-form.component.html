@@ -1,0 +1,60 @@
+<div class="container" [formGroup]="poDetailForm">
+    <div class="row">
+        <div class="col-md-2">Supplier</div>
+        <div class="col-md-4"><input class="form-control" formControlName="supplierNo" readonly/></div>
+        <div class="col-md-2">Supplier Name</div>
+        <div class="col-md-4"><input class="form-control" formControlName="supplierName" readonly/></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">Stock site</div>
+        <div class="col-md-4"><input class="form-control" formControlName="stockSite"  readonly/> </div>
+        <div class="col-md-2">Stock name</div>
+        <div class="col-md-4"><input class="form-control" formControlName="stockName"/></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">Order Date</div>
+        <div class="col-md-4"><input class="form-control" formControlName="orderDate" readonly/></div>
+        <div class="col-md-2">Address<span class="text-danger">*</span></div>
+        <div class="col-md-4"><textarea class="form-control" formControlName="address"></textarea></div>
+    </div>
+    <ng-container *ngIf="poDetailForm.controls['address'].invalid && poDetailForm.controls['address'].touched">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4"></div>
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <small class="text-danger">Address is required</small>
+            </div>
+        </div>
+    </ng-container>
+    <div class="row">
+        <div class="column col-md-6">
+            <div class="row">
+                <div class="col-md-4">Note</div>
+                <div class="col-md-8"><textarea class="form-control" formControlName="note"></textarea></div>
+            </div>
+        </div>
+        <div class="column col-md-6">
+            <div class="row">
+                <div class="col-md-4">County<span class="text-danger">*</span></div>
+                <div class="col-md-8"><input class="form-control" formControlName="county"/></div>
+            </div>
+            <ng-container *ngIf="poDetailForm.controls['county'].invalid && poDetailForm.controls['county'].touched">
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-8"><small class="text-danger" >County is required</small></div>
+                </div>
+            </ng-container>
+            <div class="row">
+                <div class="col-md-4">PostCode<span class="text-danger">*</span></div>
+                <div class="col-md-8"><input class="form-control" formControlName="postCode"/></div>
+            </div>
+            <ng-container *ngIf="poDetailForm.controls['postCode'].invalid && poDetailForm.controls['postCode'].touched" >
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-8"><small class="text-danger" >PostCode is required</small></div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

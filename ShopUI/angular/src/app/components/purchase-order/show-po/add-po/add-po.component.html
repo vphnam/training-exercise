@@ -1,0 +1,112 @@
+<div class="container" [formGroup]="poAddForm">
+    <div class="row">
+        <div class="col-md-2">Supplier<span class="text-danger">*</span></div>
+        <div class="col-md-4">
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                formControlName="supplierNo">
+                <option value="" selected></option>
+                <option *ngFor="let sup of suppliers" value={{sup.supplierNo}}>
+                    {{sup.supplierName}}
+                </option>
+            </select>
+        </div>
+        <div class="col-md-2">Stock site<span class="text-danger">*</span></div>
+        <div class="col-md-4">
+            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                formControlName="stockSite">
+                <option value="" selected></option>
+                <option *ngFor="let st of stockSites" value={{st.stockSite1}}>
+                    {{st.stockSite1}}
+                </option>
+            </select>
+        </div>
+    </div>
+    <ng-container *ngIf="(poAddForm.controls['supplierNo'].invalid && poAddForm.controls['supplierNo'].touched) || 
+    (poAddForm.controls['stockSite'].invalid && poAddForm.controls['stockSite'].touched)">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <ng-container
+                    *ngIf="poAddForm.controls['supplierNo'].invalid && poAddForm.controls['supplierNo'].touched">
+                    <small class="text-danger">*Supplier is required</small>
+                </ng-container>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <ng-container
+                    *ngIf="poAddForm.controls['stockSite'].invalid && poAddForm.controls['stockSite'].touched">
+                    <small class="text-danger">*StockSite is required</small>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+    <div class="row">
+        <div class="col-md-2">Stock name<span class="text-danger">*</span></div>
+        <div class="col-md-4"><input class="form-control" formControlName="stockName" /></div>
+        <div class="col-md-2">OrderDate<span class="text-danger">*</span></div>
+        <div class="col-md-4"><input type="date" class="form-control" formControlName="orderDate" /></div>
+    </div>
+    <ng-container *ngIf="(poAddForm.controls['stockName'].invalid && poAddForm.controls['stockName'].touched) || 
+    (poAddForm.controls['orderDate'].invalid && poAddForm.controls['orderDate'].touched)">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <ng-container
+                    *ngIf="poAddForm.controls['stockName'].invalid && poAddForm.controls['stockName'].touched">
+                    <small class="text-danger">*StockName is required</small>
+                </ng-container>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <ng-container
+                    *ngIf="poAddForm.controls['orderDate'].invalid && poAddForm.controls['orderDate'].touched">
+                    <small class="text-danger">*OrderDate is required and can not greater than today</small>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+    <div class="row">
+        <div class="col-md-2">County<span class="text-danger">*</span></div>
+        <div class="col-md-4"><input class="form-control" formControlName="county" /></div>
+        <div class="col-md-2">PostCode<span class="text-danger">*</span></div>
+        <div class="col-md-4"><input class="form-control" formControlName="postCode" /></div>
+    </div>
+    <ng-container *ngIf="(poAddForm.controls['county'].invalid && poAddForm.controls['county'].touched) || 
+    (poAddForm.controls['postCode'].invalid && poAddForm.controls['postCode'].touched)">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <ng-container *ngIf="poAddForm.controls['county'].invalid && poAddForm.controls['county'].touched">
+                    <small class="text-danger">*County is required</small>
+                </ng-container>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <ng-container *ngIf="poAddForm.controls['postCode'].invalid && poAddForm.controls['postCode'].touched">
+                    <small class="text-danger">*PostCode is required</small>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+    <div class="row">
+        <div class="col-md-2">Address<span class="text-danger">*</span></div>
+        <div class="col-md-4"><textarea class="form-control" formControlName="address"></textarea></div>
+        <div class="col-md-2">Note</div>
+        <div class="col-md-4"><textarea class="form-control" formControlName="note"></textarea></div>
+    </div>
+    <ng-container *ngIf="poAddForm.controls['address'].invalid && poAddForm.controls['address'].touched">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <ng-container *ngIf="poAddForm.controls['address'].invalid && poAddForm.controls['address'].touched">
+                    <small class="text-danger">*Address is required</small>
+                </ng-container>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-4"></div>
+        </div>
+    </ng-container>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-primary me-md-2" type="button" (click)="addPoBtnClick()">Add purchase order</button>
+    </div>
+</div>

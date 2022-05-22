@@ -1,0 +1,90 @@
+       <table class="table table-striped" [formGroup]="polListForm">
+            <thead>
+                <tr>
+                    <td>Part Number</td>
+                    <td>Part Description</td>
+                    <td>Manufacturer</td>
+                    <td>Order Date</td>
+                    <td>Qty Ordered</td>
+                    <td>Buy Price</td>  
+                    <td>Memo</td>
+                    <td>Amount</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody formArrayName="pol">
+                <tr *ngFor="let x of this.polListForm.get('pol').controls; let i = index;" [formGroupName]="i">
+                    <td id="partNo"><input formControlName="partNo" class="form-control" [readonly]="disabled"/></td>
+                    <td ><input formControlName="partDescription" class="form-control"/></td>
+                    <td ><input formControlName="manufacturer" class="form-control"/></td>
+                    <td id="orderDate">
+                        <input type="datetime-local" class="form-control" #od (focusout)="UpdateDate(polListForm.get('pol').at(i), $event)" [value]="polListForm.get('pol').at(i).controls['orderDate'].value"/>
+                        <ng-container  *ngIf="polListForm.get('pol').at(i).controls['orderDate'].invalid">
+                            <small class="text-danger">*Order date is required and can not be greater than today</small>
+                        </ng-container>
+                    </td>   
+                    <td>
+                        <input type="number" min="1" max="9999"  class="form-control"   
+                     (change)="onChangeQtyAndPrice(this.polListForm.get('pol'),this.polListForm.get('pol').at(i), i)" formControlName="quantityOrder"/>
+                        <ng-container  *ngIf="polListForm.get('pol').at(i).controls['quantityOrder'].invalid && polListForm.get('pol').at(i).controls['quantityOrder'].touched">
+                            <small class="text-danger">*Quantity order must > 0</small>
+                        </ng-container>
+                    </td>
+                    <td>
+                        <input type="number" min="1" class="form-control" 
+                        (change)="onChangeQtyAndPrice(this.polListForm.get('pol'),this.polListForm.get('pol').at(i), i)"  formControlName="buyPrice"/>
+                        <ng-container *ngIf="polListForm.get('pol').at(i).controls['buyPrice'].invalid && polListForm.get('pol').at(i).controls['buyPrice'].touched">
+                            <small class="text-danger">*Buy price order must > 0</small>
+                        </ng-container>
+                    </td>
+                    <td ><input formControlName="memo" class="form-control"/></td>
+                    <td ><input class="form-control" formControlName="amount" [readonly]="disabled"/></td>
+                    <td><button type="button" (click)="btnDeleteClick(this.polListForm.get('pol').at(i))" 
+                        [disabled]="disableAll" class="btn btn-light mr-1" data-keyboard="false">-</button></td>
+                </tr>        
+            </tbody>
+            <tfoot formArrayName="polAdd">
+                <tr *ngFor="let y of this.polListForm.get('polAdd').controls; let i = index;" [formGroupName]="i">
+                    <td>
+                        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" formControlName="partNo" >
+                            <option value="" selected></option>
+                            <option *ngFor="let part of parts" value={{part.partNo}}>
+                                {{part.partName}}
+                            </option>
+                        </select>
+                        <ng-container *ngIf="polListForm.get('polAdd').at(i).controls['partNo'].invalid && polListForm.get('polAdd').at(i).controls['partNo'].touched">
+                           <small class="text-danger"> *PartNo is required</small> 
+                        </ng-container> 
+                    </td>
+                    <td ><input class="form-control" formControlName="partDescription"/></td>
+                    <td ><input class="form-control" formControlName="manufacturer"/></td>
+                    <td style="width: 200px;">
+                        <input type="datetime-local" class="form-control" formControlName="orderDate"/>
+                        <ng-container  *ngIf="polListForm.get('polAdd').at(i).controls['orderDate'].invalid && polListForm.get('polAdd').at(i).controls['orderDate'].touched">
+                            <small class="text-danger">*Order date is required and can not be greater than today</small>
+                        </ng-container>
+                    </td>
+                    <td >
+                        <input type="number" min="1" max="9999"  class="form-control" formControlName="quantityOrder"/>
+                        <ng-container  *ngIf="polListForm.get('polAdd').at(i).controls['quantityOrder'].invalid && polListForm.get('polAdd').at(i).controls['quantityOrder'].touched">
+                            <small class="text-danger">*Quantity order must > 0</small>
+                        </ng-container>
+                    </td>
+                    <td >
+                        <input type="number" min="1" class="form-control" formControlName="buyPrice"/>
+                        <ng-container *ngIf="polListForm.get('polAdd').at(i).controls['buyPrice'].invalid && polListForm.get('polAdd').at(i).controls['buyPrice'].touched">
+                            <small class="text-danger">*Buy price order must > 0</small>
+                        </ng-container>
+                    </td>
+                    <td ><input  class="form-control" formControlName="memo"/></td>
+                    <td ></td>
+                    <td><button type="button" (click)="btnAddClick(this.polListForm.get('polAdd').at(i))" 
+                        class="btn btn-light mr-1" [disabled]="disableAll"  data-keyboard="false">Add</button></td>
+                </tr>
+            </tfoot>
+        </table>
+
+<h3 style="text-align: right;">Total purchase order: <span>{{total}}</span></h3>
+<div class="add-new-line-container">
+    <button type="button" class="btn-like-a-tag" (click)="AddLineBtnClick()" >Add new purchase order line</button>
+</div>

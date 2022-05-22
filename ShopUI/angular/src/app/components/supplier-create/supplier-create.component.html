@@ -1,0 +1,30 @@
+<div class="container" [formGroup]="addSupplierFormGroup">
+    <div class="row">
+        <div class="col-md-2">Supplier name<span class="text-danger">*</span></div>
+        <div class="col-md-4"><input class="form-control" formControlName="supplierName" /></div>
+        <div class="col-md-2">Email<span class="text-danger">*</span></div>
+        <div class="col-md-4"><input class="form-control" formControlName="email" /></div>
+    </div>
+    <ng-container *ngIf="(addSupplierFormGroup.controls['supplierName'].invalid && addSupplierFormGroup.controls['supplierName'].touched) || 
+    (addSupplierFormGroup.controls['email'].invalid && addSupplierFormGroup.controls['email'].touched)">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <ng-container
+                    *ngIf="addSupplierFormGroup.controls['supplierName'].invalid && addSupplierFormGroup.controls['supplierName'].touched">
+                    <small class="text-danger">*Supplier name is required</small>
+                </ng-container>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <ng-container
+                    *ngIf="addSupplierFormGroup.controls['email'].invalid && addSupplierFormGroup.controls['email'].touched">
+                    <small class="text-danger">*Email is required</small>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button type="button" class="btn btn-primary me-md-2" (click)="addNewSupplier()">Add new supplier</button>
+    </div>
+</div>

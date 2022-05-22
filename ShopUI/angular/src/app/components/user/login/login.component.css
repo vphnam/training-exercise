@@ -1,0 +1,16 @@
+.text-center{
+    width: 1000px;
+}
+label{
+    font-size: large;
+}
+input{
+    height:100%;
+}
+.row{
+    margin-top: 20px;
+}
+.col-md-12 button{
+    height: 150%;
+    width:25%;
+}

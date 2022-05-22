@@ -1,0 +1,11 @@
+.accordion-button{
+    color: white;
+    height: 50px;
+}
+.accordion-header{
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+.accordion-item{
+    margin-top: 0;
+}

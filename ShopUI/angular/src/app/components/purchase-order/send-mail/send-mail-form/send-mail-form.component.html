@@ -1,0 +1,49 @@
+<!-- Wrapper container -->
+<div class="container py-4">
+  <form [formGroup]="sendmailForm" (ngSubmit)="onSubmit()">
+      <!-- From input -->
+      <div class="container">
+          <div class="row">
+            <div class="col-md-2"><label class="form-label" for="from">From: </label> </div>
+            <div class="col-md-10"><input formControlName="from" class="form-control" type="text" placeholder="From" readonly/> </div>
+          </div>
+      </div>
+        <!-- To input -->
+        <div class="container">
+          <div class="row">
+            <div class="col-md-2"><label class="form-label" for="to">To: </label> </div> 
+            <div class="col-md-10"><input formControlName="to" class="form-control" type="text" placeholder="To"/> </div>
+          </div>   
+        <div class="row">
+          <small class="text-danger" *ngIf="sendmailForm.controls['to'].invalid && sendmailForm.controls['to'].touched">"To" field is required</small>
+        </div>
+      </div>  
+      <div class="container">
+          <div class="row">
+            <div class="col-md-2"><label class="form-label" for="cc">Cc: </label> </div>
+            <div class="col-md-10"><input formControlName="cc" class="form-control" type="text" placeholder="Cc"/> </div>
+          </div>
+          <small class="text-danger" *ngIf="sendmailForm.controls['cc'].invalid && sendmailForm.controls['cc'].touched">"Cc" field must be email</small> 
+      </div>
+      <!-- Subject input -->
+      <div class="container">
+        <div class="row">
+          <div class="col-md-2"><label class="form-label" for="subject">Subject: </label> </div>
+          <div class="col-md-10"><input formControlName="subject" class="form-control"value="Order [{{po.OrderNo}} - {{po.StockName}}]" type="text" placeholder="Subject"/> </div>
+        </div>
+    </div>
+    <small class="text-danger" *ngIf="sendmailForm.controls['subject'].invalid && sendmailForm.controls['subject'].touched">"Subject" field is required</small>
+  <!-- Message input -->
+    <div class="container">
+        <div class="row">
+            <textarea formControlName="contains" class="form-control"  type="text" placeholder="Message" style="height: 15rem;"></textarea>
+        </div>
+    </div>
+    <small class="text-danger" *ngIf="sendmailForm.controls['contains'].invalid && sendmailForm.controls['contains'].touched">"Contains" field must have at least 10 characters</small>
+     <!-- Form submit button -->
+    <div class="button-container"> 
+            <button class="btn btn-primary" [disabled]="sendmailForm.invalid" type="submit">Send 1 mail</button>
+            <button class="btn btn-primary" routerLink="/purchase-order">Send mail later, go to PO tab</button>
+    </div>
+  </form>
+  </div>

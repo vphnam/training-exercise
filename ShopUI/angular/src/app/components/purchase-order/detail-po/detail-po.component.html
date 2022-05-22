@@ -1,0 +1,11 @@
+<h3 class="d-flex justify-content-center">Purchase Order {{orderNoToChildComponent}}</h3>
+<app-po-detail-form [no] = "orderNoToChildComponent" [disableAll] = "disableAllToChildComponent"></app-po-detail-form>
+<app-pol-list [no] = "orderNoToChildComponent" [disableAll] = "disableAllToChildComponent"></app-pol-list>
+<div class="button-container">
+    <button class="btn btn-primary float-right m-2" routerLink="/purchase-order">Return purchase order list page</button>
+    <button class="btn btn-primary float-right m-2" routerLink="/purchase-order/send-mail/{{this.orderNoToChildComponent}}" [disabled]="disableAllToChildComponent">Resend mail</button>
+    <button class="btn btn-primary float-right m-2" (click)="cancelPoBtnClick()" [disabled]="disableAllToChildComponent">Cancel purchase order</button>
+    <button class="btn btn-primary float-right m-2" (click)="saveChangesBtnClick()" [disabled]="disableAllToChildComponent">Save changes</button>
+</div>
+
+

@@ -1,0 +1,12 @@
+.fullscreen{
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: black;
+    opacity: 0.9;
+    z-index: 99;
+}
+.navbar{
+    margin-bottom: 20px;
+}
